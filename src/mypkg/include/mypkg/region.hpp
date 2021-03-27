@@ -8,9 +8,9 @@ class Region
 public:
     Region(std::string name);
     void AddCity(City city);
+    void ShowCities();
 
 private:
     std::string _name;
-    std::unique_ptr<std::string> _region_name_ptr;
-    std::map<int, std::unique_ptr<City>> _cities;
+    std::vector<City> _cities;
 };

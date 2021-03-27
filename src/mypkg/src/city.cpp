@@ -5,7 +5,7 @@ City::City(std::string name) : _name(name)
     ROS_INFO_STREAM("Created city: " << name);
 }
 
-std::string City::GetName()
+const char *City::GetName()
 {
-    return this->_name;
+    return this->_name.c_str();
 }
