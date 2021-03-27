@@ -1,5 +1,4 @@
 <launch>
   <env name="ROSCONSOLE_FORMAT" value="[${severity}] [${time}] [${node}]: ${message}"/>
   <node name="mypkg" pkg="mypkg" type="mypkg" output="screen" />
-
 </launch>

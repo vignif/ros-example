@@ -7,6 +7,7 @@ class Region
 {
 public:
     Region(std::string name);
+    ~Region(){};
     void AddCity(City city);
     void ShowCities();
 

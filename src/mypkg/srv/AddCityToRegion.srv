@@ -1,0 +1,8 @@
+#request constants
+string region_name
+string city_name
+mypkg/coordinates coordinates
+
+---
+#response constants
+bool success

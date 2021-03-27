@@ -1,20 +1,13 @@
-#include <iostream>
-#include "mypkg/region.hpp"
 #include <ros/ros.h>
+#include "mypkg/region.hpp"
+#include "mypkg/manager.hpp"
+#include "std_msgs/String.h"
 
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "talker");
-    ros::NodeHandle nh;
-
-    auto forli = City("Forli");
-    auto cesena = City("Cesena");
-    auto emilia_romagna = Region("Emilia-Romagna");
-
-    emilia_romagna.AddCity(forli);
-    emilia_romagna.AddCity(cesena);
-
-    emilia_romagna.ShowCities();
+    ros::init(argc, argv, "CitiesInRegion");
+    ros::NodeHandle nh{"~"};
+    Manager m(nh);
     ros::spin();
     return 0;
 }
