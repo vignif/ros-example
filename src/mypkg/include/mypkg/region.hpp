@@ -10,6 +10,7 @@ public:
     ~Region(){};
     void AddCity(City city);
     void ShowCities();
+    const char *GetName();
 
 private:
     std::string _name;

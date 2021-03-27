@@ -9,6 +9,24 @@ Manager::Manager(const ros::NodeHandle &nh) : _nh(nh)
 bool Manager::CreateCity(mypkg::AddCityToRegion::Request &req,
                          mypkg::AddCityToRegion::Response &res)
 {
-    ROS_INFO("Received city %s", req.city_name.c_str());
-    return true;
+    if (req.city_name.size() > 0 && req.region_name.size() > 0)
+    {
+        auto city = City(req.city_name);
+        auto region = Region(req.region_name);
+
+        _objects.push_back(std::make_pair(city, region));
+        ShowState();
+        return true;
+    }
+
+    return false;
+}
+
+void Manager::ShowState()
+{
+    ROS_INFO("State");
+    for (auto obj : _objects)
+    {
+        ROS_INFO("City %s in Region %s", obj.first.GetName(), obj.second.GetName());
+    }
 }

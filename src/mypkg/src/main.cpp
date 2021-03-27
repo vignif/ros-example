@@ -1,5 +1,5 @@
 #include <ros/ros.h>
-#include "mypkg/region.hpp"
+
 #include "mypkg/manager.hpp"
 #include "std_msgs/String.h"
 

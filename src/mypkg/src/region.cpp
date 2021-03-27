@@ -19,3 +19,8 @@ void Region::ShowCities()
         ROS_INFO("%s", city.GetName());
     }
 };
+
+const char *Region::GetName()
+{
+    return this->_name.c_str();
+}
