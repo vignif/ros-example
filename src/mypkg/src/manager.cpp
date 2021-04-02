@@ -21,6 +21,7 @@ Manager::Manager(const ros::NodeHandle &nh) : _nh(nh)
         ROS_DEBUG("Opened database successfully\n");
     }
 }
+
 Manager::~Manager()
 {
     ROS_DEBUG("Closing DB");

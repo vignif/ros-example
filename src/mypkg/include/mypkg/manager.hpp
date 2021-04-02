@@ -22,10 +22,11 @@ public:
 private:
     bool CreateCity(mypkg::AddCityToRegion::Request &req,
                     mypkg::AddCityToRegion::Response &res);
-    ros::NodeHandle _nh;
-    ros::ServiceServer _service;
-    std::vector<std::pair<City, Region>> _objects;
+    ros::NodeHandle _nh;                           /** Ros nodehandle */
+    ros::ServiceServer _service;                   /** Ros server checks if the user wants to add a new city */
+    std::vector<std::pair<City, Region>> _objects; /** Store pairs City-Region*/
 
-    sqlite3 *_db;
-    int _rc;
+    sqlite3 *_db;      /** Pointer to SQLite connection */
+    char *zErrMsg = 0; /** Save any error messages */
+    int _rc;           /** Database connection object */
 };
