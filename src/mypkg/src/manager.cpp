@@ -1,10 +1,13 @@
 #include "mypkg/manager.hpp"
+#include <jsoncpp/json/json.h>
+#include <fstream>
 
 Manager::Manager(const ros::NodeHandle &nh) : _nh(nh)
 {
     ROS_INFO_STREAM("Created Manager");
     _service = _nh.advertiseService("CreateCity", &Manager::CreateCity, this);
     InitDatabase();
+    LoadJson();
 }
 
 Manager::~Manager()
@@ -85,6 +88,30 @@ bool Manager::CreateCity(mypkg::AddCityToRegion::Request &req,
     }
 
     return false;
+}
+
+void Manager::LoadJson()
+{
+    Json::Value root;
+    Json::Reader reader;
+    auto path = ros::package::getPath("mypkg");
+    std::string jsonName = "/data/cities.json";
+
+    auto fullpath = path + jsonName;
+
+    std::ifstream ifs(fullpath); //open file example.json
+
+    if (!reader.parse(ifs, root))
+    {
+        ROS_ERROR("failed to parse");
+    }
+
+    Json::Value val = root["cities"];
+    for (auto i : val)
+    {
+        ROS_ERROR_STREAM(i["name"].asString());
+        ROS_ERROR_STREAM(i["postal"].asString());
+    }
 }
 
 void Manager::ShowState()

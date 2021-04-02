@@ -22,6 +22,7 @@ public:
 private:
     void InitDatabase();
     void InitTable();
+    void LoadJson();
 
     bool CreateCity(mypkg::AddCityToRegion::Request &req,
                     mypkg::AddCityToRegion::Response &res);
