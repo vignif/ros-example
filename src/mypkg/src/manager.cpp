@@ -62,12 +62,12 @@ void Manager::InitTable()
 
     if (_rc != SQLITE_OK)
     {
-        fprintf(stderr, "SQL error: %s\n", _zErrMsg);
+        ROS_ERROR("SQL error: %s", _zErrMsg);
         sqlite3_free(_zErrMsg);
     }
     else
     {
-        fprintf(stdout, "Table created successfully\n");
+        ROS_DEBUG("Table created successfully");
     }
 }
 
