@@ -7,11 +7,16 @@
 
 #include "mypkg/region.hpp"
 
+#include <sqlite3.h>
+#include <ros/package.h>
+
+#define SQLITE_OPEN_CREATE 0x00000004 /* Ok for sqlite3_open_v2() */
+
 class Manager
 {
 public:
     Manager(const ros::NodeHandle &nh);
-    ~Manager(){};
+    ~Manager();
     void ShowState();
 
 private:
@@ -20,4 +25,7 @@ private:
     ros::NodeHandle _nh;
     ros::ServiceServer _service;
     std::vector<std::pair<City, Region>> _objects;
+
+    sqlite3 *_db;
+    int _rc;
 };

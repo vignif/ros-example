@@ -4,6 +4,27 @@ Manager::Manager(const ros::NodeHandle &nh) : _nh(nh)
 {
     ROS_INFO_STREAM("Created Manager");
     _service = _nh.advertiseService("CreateCity", &Manager::CreateCity, this);
+
+    auto path = ros::package::getPath("mypkg");
+    auto fullpath = path + std::string("/test.db");
+
+    ROS_DEBUG_STREAM("Database located in: " << fullpath);
+
+    _rc = sqlite3_open(fullpath.c_str(), &_db);
+
+    if (_rc)
+    {
+        ROS_ERROR("Can't open database: %s\n", sqlite3_errmsg(_db));
+    }
+    else
+    {
+        ROS_DEBUG("Opened database successfully\n");
+    }
+}
+Manager::~Manager()
+{
+    ROS_DEBUG("Closing DB");
+    sqlite3_close(_db);
 }
 
 bool Manager::CreateCity(mypkg::AddCityToRegion::Request &req,

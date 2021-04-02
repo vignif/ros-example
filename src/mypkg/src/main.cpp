@@ -1,4 +1,5 @@
 #include <ros/ros.h>
+#include <stdio.h>
 
 #include "mypkg/manager.hpp"
 #include "std_msgs/String.h"

@@ -12,7 +12,9 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   std_msgs
   message_generation
+  roslib
 )
+find_package(SQLite3 REQUIRED)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -104,12 +106,9 @@ AddCityToRegion.srv
 ## LIBRARIES: libraries you create in this project that dependent projects also need
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
-catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES mypkg
-#  CATKIN_DEPENDS roscpp rospy std_msgs
-#  DEPENDS system_lib
-)
+
+catkin_package(INCLUDE_DIRS include CATKIN_DEPENDS roscpp std_msgs roslib)
+
 
 ###########
 ## Build ##
@@ -137,7 +136,7 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/main.cpp)
 add_executable(${PROJECT_NAME} src/main.cpp src/region.cpp src/city.cpp src/manager.cpp)
-target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} sqlite3)
 
 add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_gencpp)
 
