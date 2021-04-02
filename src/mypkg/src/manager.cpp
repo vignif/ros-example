@@ -4,9 +4,22 @@ Manager::Manager(const ros::NodeHandle &nh) : _nh(nh)
 {
     ROS_INFO_STREAM("Created Manager");
     _service = _nh.advertiseService("CreateCity", &Manager::CreateCity, this);
+    InitDatabase();
+}
 
+Manager::~Manager()
+{
+    ROS_DEBUG("Closing DB");
+    sqlite3_close(_db);
+}
+
+void Manager::InitDatabase()
+{
     auto path = ros::package::getPath("mypkg");
-    auto fullpath = path + std::string("/test.db");
+    std::string nameDB;
+    _nh.getParam("db_name", nameDB);
+
+    auto fullpath = path + nameDB;
 
     ROS_DEBUG_STREAM("Database located in: " << fullpath);
 
@@ -19,13 +32,43 @@ Manager::Manager(const ros::NodeHandle &nh) : _nh(nh)
     else
     {
         ROS_DEBUG("Opened database successfully\n");
+        InitTable();
     }
 }
 
-Manager::~Manager()
+static int callback(void *NotUsed, int argc, char **argv, char **azColName)
 {
-    ROS_DEBUG("Closing DB");
-    sqlite3_close(_db);
+    int i;
+    for (i = 0; i < argc; i++)
+    {
+        printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+    }
+    printf("\n");
+    return 0;
+}
+
+void Manager::InitTable()
+{
+    /* Create SQL statement */
+    auto sql = "CREATE TABLE IF NOT EXISTS CITIES("
+               "ID INT PRIMARY KEY     NOT NULL,"
+               "NAME           TEXT    NOT NULL,"
+               "REGION         TEXT    NOT NULL,"
+               "LATITUDE       FLOAT,"
+               "LONGITUDE      FLOAT );";
+
+    /* Execute SQL statement */
+    _rc = sqlite3_exec(_db, sql, callback, 0, &_zErrMsg);
+
+    if (_rc != SQLITE_OK)
+    {
+        fprintf(stderr, "SQL error: %s\n", _zErrMsg);
+        sqlite3_free(_zErrMsg);
+    }
+    else
+    {
+        fprintf(stdout, "Table created successfully\n");
+    }
 }
 
 bool Manager::CreateCity(mypkg::AddCityToRegion::Request &req,
