@@ -1,13 +1,13 @@
 #include "mypkg/region.hpp"
 
-Region::Region(std::string name) : _name(name)
+Region::Region(std::string name) : Entity(name)
 {
     ROS_INFO_STREAM("Created region: " << name);
 };
 
 void Region::AddCity(City city)
 {
-    ROS_INFO("Added city %s to region %s", city.GetName(), this->_name.c_str());
+    ROS_INFO("Added city %s to region %s", city.GetName(), this->GetName());
 
     _cities.push_back(city);
 };
@@ -19,8 +19,3 @@ void Region::ShowCities()
         ROS_INFO("%s", city.GetName());
     }
 };
-
-const char *Region::GetName()
-{
-    return this->_name.c_str();
-}

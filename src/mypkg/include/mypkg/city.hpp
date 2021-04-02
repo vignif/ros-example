@@ -1,15 +1,13 @@
 #include <iostream>
 #include <memory>
 #include <ros/ros.h>
+#include "mypkg/Entity.hpp"
 
-class City
+class City : public Entity
 {
 public:
     City(std::string name);
-    ~City(){};
-    const char *GetName();
 
 private:
-    std::string _name;
     std::pair<float, float> _coordinates;
 };

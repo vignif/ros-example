@@ -24,7 +24,6 @@ bool Manager::CreateCity(mypkg::AddCityToRegion::Request &req,
 
 void Manager::ShowState()
 {
-    ROS_INFO("State");
     for (auto obj : _objects)
     {
         ROS_INFO("City %s in Region %s", obj.first.GetName(), obj.second.GetName());

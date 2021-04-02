@@ -3,16 +3,13 @@
 #include <memory>
 #include <ros/ros.h>
 
-class Region
+class Region : public Entity
 {
 public:
     Region(std::string name);
-    ~Region(){};
     void AddCity(City city);
     void ShowCities();
-    const char *GetName();
 
 private:
-    std::string _name;
     std::vector<City> _cities;
 };
