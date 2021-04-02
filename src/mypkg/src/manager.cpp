@@ -109,8 +109,9 @@ void Manager::LoadJson()
     Json::Value val = root["cities"];
     for (auto i : val)
     {
-        ROS_ERROR_STREAM(i["name"].asString());
-        ROS_ERROR_STREAM(i["postal"].asString());
+        auto name = i["name"].asString();
+        auto postal = i["postal"].asInt();
+        _jsonEntries.push_back(std::make_pair(postal, name));
     }
 }
 
