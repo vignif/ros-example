@@ -125,7 +125,7 @@ void Manager::InsertCity(mypkg::AddCityToRegion::Response &res)
     }
     else
     {
-        ROS_DEBUG("City inserted in DB successfully");
+        ROS_DEBUG("City %s inserted in DB successfully", name.c_str());
     }
 }
 
