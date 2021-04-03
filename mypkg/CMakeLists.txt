@@ -67,7 +67,7 @@ pkg_check_modules(JSONCPP jsoncpp)
 ## Generate messages in the 'msg' folder
  add_message_files(
    FILES
-   coordinates.msg
+   CityInfo.msg
 #   Message2.msg
 )
 

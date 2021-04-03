@@ -1,0 +1,4 @@
+string city_name
+string region_name
+float32 latitude
+float32 longitude
