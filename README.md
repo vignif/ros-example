@@ -1,6 +1,31 @@
-# The Great C++ Ros Example
+# The Great C++ & Python Ros Example
 
-Complete example of ROS package - C++
+Complete example of ROS package - C++ & Python
+When the project starts a json file is parsed. The file contains entries like:
+```json
+{
+    "cities": [
+        {
+            "name": "Forli'",
+            "postal": 47122
+        }
+        ...
+    ]
+}
+```
+The pairs [city-postal] are passed to the component `server.py` which is advertising a Service named `CreateCity`. Once the component `server.py` receives this information it queries an API for retrieving geo informations [link](https://nominatim.openstreetmap.org) and is interpreting the response of the API. The response contains the relevant information of each city like:
+- Region
+- Latitude
+- Longitude
+
+These information is packed into the service response and the node `mypkg` is unpacking the data and writing in the database with the schema [id, name, postal, region, latitude, longitude]. The id is autoincremental. A constraint on uniqueness is considering unique the tuple [name, postal].
+Once this is done, the database can still be filled up with informations of more cities. In order to do so, a ros node or simply the user can publish a proper topic with the pair [city-postal] like:
+
+```
+rostopic pub /RTCreateCity mypkg/RTCityReq "city_name: 'New York'
+postal: 10001"
+```
+
 
 ## Getting Started
 
@@ -14,6 +39,48 @@ The project also contains:
 - A JSON parser implemented using a cpp library [json](https://github.com/open-source-parsers/jsoncpp)
 - Interface to a remote API [nominatim](https://nominatim.openstreetmap.org)
 
+## How to install
+Given your catkin workspace `~/ros_ws`, clone the current repository with:
+
+```
+git clone git@github.com:vignif/ros-example.git src
+```
+
+Check that your system has all the dependencies needed for the project with:
+
+```
+rosdep install --from-paths src --ignore-src -r -y
+```
+
+Build the project with catkin using:
+
+```
+catkin_make
+```
+
+## How to run
+
+Now that everything is built on your machine, you need to source the binaries with:
+
+in case you are using bash
+```
+source ~/ros_ws/devel/setup.bash
+```
+
+in case you are using zsh
+```
+source ~/ros_ws/devel/setup.zsh
+```
+
+Now you can fire the two main nodes with:
+```
+roslaunch mypkg mypkg.launch
+```
+
+The json file located in `mypkg/data/cities.json` is parsed, the information is transmitted to the API which is returning the data [region, latitude, longitude] of the cities listed in the file.
+This information is then written in a database [created at runtime] named `test.db`.
+If you want to change the name of your database you can modify the entry of the `mypkg.launch` file containing the db name.
+The schema of the table `cities` is fixed and is managed with the object `Manager`.
 
 ## Versioning
 
