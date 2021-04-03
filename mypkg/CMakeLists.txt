@@ -68,6 +68,7 @@ pkg_check_modules(JSONCPP jsoncpp)
  add_message_files(
    FILES
    CityInfo.msg
+   RTCityReq.msg
 #   Message2.msg
 )
 

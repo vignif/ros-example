@@ -2,6 +2,7 @@
 #include <memory>
 #include <ros/ros.h>
 #include "mypkg/AddCityToRegion.h"
+#include "mypkg/RTCityReq.h"
 #include "std_msgs/String.h"
 #include <map>
 #include <tuple>
@@ -27,11 +28,13 @@ private:
     void InsertCity(mypkg::AddCityToRegion::Response &res);
     bool CreateCity(mypkg::AddCityToRegion::Request &req,
                     mypkg::AddCityToRegion::Response &res);
+    void CreateCityRunTime(const mypkg::RTCityReqPtr &req);
 
     std::vector<std::pair<int, std::string>> _jsonEntries; /** Vector of Postal-City from json file */
     ros::NodeHandle _nh;                                   /** Ros nodehandle */
     ros::ServiceClient _client;                            /** Ros Client asks to server for full info of a city */
-    std::vector<std::pair<City, Region>> _objects;         /** Store pairs City-Region*/
+    ros::Subscriber _subscriber;
+    std::vector<std::pair<City, Region>> _objects; /** Store pairs City-Region*/
 
     sqlite3 *_db;       /** Pointer to SQLite connection */
     char *_zErrMsg = 0; /** Save any error messages */

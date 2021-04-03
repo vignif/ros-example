@@ -1,0 +1,2 @@
+string city_name
+int64 postal

@@ -6,6 +6,9 @@ Manager::Manager(const ros::NodeHandle &nh) : _nh(nh)
 {
     ROS_INFO_STREAM("Created Manager");
     _client = _nh.serviceClient<mypkg::AddCityToRegion>("/CreateCity");
+
+    _subscriber = _nh.subscribe("/RTCreateCity", 1, &Manager::CreateCityRunTime, this);
+
     InitDatabase();
     LoadJson();
     GetFullInfoCities();
@@ -15,6 +18,23 @@ Manager::~Manager()
 {
     ROS_DEBUG("Closing DB");
     sqlite3_close(_db);
+}
+
+void Manager::CreateCityRunTime(const mypkg::RTCityReqPtr &req)
+{
+    mypkg::AddCityToRegion srv;
+    srv.request.city_name = req->city_name;
+    srv.request.postal = req->postal;
+    _client.waitForExistence();
+    if (_client.call(srv))
+    {
+        ROS_DEBUG("Insert City %s", srv.response.city.city_name.c_str());
+        InsertCity(srv.response);
+    }
+    else
+    {
+        ROS_ERROR_STREAM("failed");
+    }
 }
 
 void Manager::GetFullInfoCities()
@@ -31,7 +51,6 @@ void Manager::GetFullInfoCities()
         if (_client.call(srv))
         {
 
-            ROS_ERROR_STREAM(srv.response);
             InsertCity(srv.response);
         }
         else
