@@ -32,6 +32,7 @@ void Manager::GetFullInfoCities()
         {
 
             ROS_ERROR_STREAM(srv.response);
+            InsertCity(srv.response);
         }
         else
         {
@@ -74,17 +75,52 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName)
     return 0;
 }
 
-void Manager::InsertCity() {}
+void Manager::InsertCity(mypkg::AddCityToRegion::Response &res)
+{
+    auto name = res.city.city_name;
+    auto postal = res.city.postal;
+    auto region = res.city.region_name;
+    auto latitude = res.city.latitude;
+    auto longitude = res.city.longitude;
+
+    auto sql = "INSERT INTO cities (id, name, postal, region, latitude, longitude) VALUES ("
+               "NULL, "
+               "'" +
+               name + "', "
+                      "'" +
+               std::to_string(postal) + "', "
+                                        "'" +
+               region + "', "
+                        "'" +
+               std::to_string(latitude) + "', "
+                                          "'" +
+               std::to_string(longitude) + "');";
+
+    /* Execute SQL statement */
+    _rc = sqlite3_exec(_db, sql.c_str(), callback, 0, &_zErrMsg);
+
+    if (_rc != SQLITE_OK)
+    {
+        ROS_ERROR("SQL error: %s", _zErrMsg);
+        sqlite3_free(_zErrMsg);
+    }
+    else
+    {
+        ROS_DEBUG("City inserted in DB successfully");
+    }
+}
 
 void Manager::InitTable()
 {
     /* Create SQL statement */
-    auto sql = "CREATE TABLE IF NOT EXISTS CITIES("
-               "ID INT PRIMARY KEY     NOT NULL,"
-               "NAME           TEXT    NOT NULL,"
-               "REGION         TEXT    NOT NULL,"
-               "LATITUDE       FLOAT,"
-               "LONGITUDE      FLOAT );";
+    auto sql = "CREATE TABLE IF NOT EXISTS cities("
+               "id INTEGER PRIMARY KEY     NOT NULL,"
+               "name           TEXT    NOT NULL,"
+               "postal         INT     NOT NULL,"
+               "region         TEXT    NOT NULL,"
+               "latitude       FLOAT,"
+               "longitude      FLOAT,"
+               "UNIQUE(name, postal));";
 
     /* Execute SQL statement */
     _rc = sqlite3_exec(_db, sql, callback, 0, &_zErrMsg);
