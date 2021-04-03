@@ -4,10 +4,26 @@ from __future__ import print_function
 
 from mypkg.srv import AddCityToRegion, AddCityToRegionResponse
 import rospy
+import requests
 
 
 def handle_response(req):
-    res = True
+    if req.city_name != "" or req.postal != 0:
+        ploads = {
+            "city": req.city_name,
+            "postalcode": req.postal,
+            "format": "json",
+            "limit": 1,
+        }
+        r = requests.get(
+            "https://nominatim.openstreetmap.org/search?",
+            params=ploads,
+        )
+        rospy.logdebug(r.text)
+        res = True
+    else:
+        rospy.logerr("Service content can't be empty!")
+        res = False
     return AddCityToRegionResponse(res)
 
 
