@@ -15,7 +15,21 @@ find_package(catkin REQUIRED COMPONENTS
   roslib
 )
 find_package(SQLite3 REQUIRED)
+find_package(Boost REQUIRED)
 find_package(PkgConfig REQUIRED)
+macro(find_gstreamer_component prefix pkg lib)
+  pkg_check_modules(PC_${prefix} REQUIRED ${pkg})
+  find_library(${prefix}_LIBRARIES NAMES ${lib} HINTS ${PC_${prefix}_LIBRARY_DIRS} ${PC_${prefix}_LIBDIR})
+  list(APPEND gstreamer_INCLUDE_DIRS ${PC_${prefix}_INCLUDE_DIRS})
+  list(APPEND gstreamer_LIBRARIES ${${prefix}_LIBRARIES})
+  mark_as_advanced(${prefix}_LIBRARIES gstreamer_LIBRARIES gstreamer_INCLUDE_DIRS)
+endmacro()
+
+find_gstreamer_component(gst      gstreamer-1.0       gstreamer-1.0)
+find_gstreamer_component(gstbase  gstreamer-base-1.0  gstbase-1.0)
+find_gstreamer_component(gstapp   gstreamer-app-1.0   gstapp-1.0)
+find_gstreamer_component(gstvideo gstreamer-video-1.0 gstvideo-1.0)
+
 pkg_check_modules(JSONCPP jsoncpp)
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -108,7 +122,10 @@ AddCityToRegion.srv
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 
-catkin_package(INCLUDE_DIRS include CATKIN_DEPENDS roscpp std_msgs roslib)
+catkin_package(
+  INCLUDE_DIRS include 
+  CATKIN_DEPENDS roscpp std_msgs roslib
+  DEPENDS libgstreamer1.0-dev)
 
 
 ###########
@@ -121,6 +138,7 @@ include_directories(
  include
   ${catkin_INCLUDE_DIRS}
   ${JSONCPP_INCLUDE_DIRS}
+  ${gstreamer_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -138,7 +156,13 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/main.cpp)
 add_executable(${PROJECT_NAME} src/main.cpp src/region.cpp src/city.cpp src/manager.cpp)
-target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} sqlite3 jsoncpp)
+
+target_link_libraries(
+  ${PROJECT_NAME} 
+  ${catkin_LIBRARIES} 
+  sqlite3 jsoncpp
+  ${gstreamer_LIBRARIES}
+)
 
 add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_gencpp)
 
