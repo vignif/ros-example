@@ -5,15 +5,39 @@
 Manager::Manager(const ros::NodeHandle &nh) : _nh(nh)
 {
     ROS_INFO_STREAM("Created Manager");
-    _client = _nh.serviceClient<mypkg::AddCityToRegion>("CreateCity");
+    _client = _nh.serviceClient<mypkg::AddCityToRegion>("/CreateCity");
     InitDatabase();
     LoadJson();
+    GetFullInfoCities();
 }
 
 Manager::~Manager()
 {
     ROS_DEBUG("Closing DB");
     sqlite3_close(_db);
+}
+
+void Manager::GetFullInfoCities()
+{
+    for (auto i : _jsonEntries)
+    {
+        auto postal = i.first;
+        auto name = i.second;
+        mypkg::AddCityToRegion srv;
+        srv.request.city_name = name;
+        srv.request.postal = postal;
+
+        _client.waitForExistence();
+        if (_client.call(srv))
+        {
+
+            ROS_ERROR_STREAM(srv.response);
+        }
+        else
+        {
+            ROS_ERROR_STREAM("failed");
+        }
+    }
 }
 
 void Manager::InitDatabase()
