@@ -1,6 +1,9 @@
 #include "mypkg/manager.hpp"
 #include <jsoncpp/json/json.h>
-#include <fstream>
+#include <fstream>/* 
+#include <curlpp/cURLpp.hpp>
+#include <curlpp/Easy.hpp>
+#include <curlpp/Options.hpp> */
 
 Manager::Manager(const ros::NodeHandle &nh) : _nh(nh)
 {
