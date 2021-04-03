@@ -1,7 +1,6 @@
 #request constants
-string region_name
+int64 postal
 string city_name
-mypkg/coordinates coordinates
 
 ---
 #response constants

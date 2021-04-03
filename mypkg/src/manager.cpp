@@ -80,12 +80,11 @@ void Manager::InitTable()
 bool Manager::CreateCity(mypkg::AddCityToRegion::Request &req,
                          mypkg::AddCityToRegion::Response &res)
 {
-    if (req.city_name.size() > 0 && req.region_name.size() > 0)
+    if (req.city_name.size() > 0 && req.postal > 0)
     {
         auto city = City(req.city_name);
-        auto region = Region(req.region_name);
 
-        _objects.push_back(std::make_pair(city, region));
+        // _objects.push_back(std::make_pair(city, region));
         ShowState();
         return true;
     }
