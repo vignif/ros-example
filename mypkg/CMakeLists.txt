@@ -16,9 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
 )
 find_package(SQLite3 REQUIRED)
 find_package(PkgConfig REQUIRED)
-find_package(curlcpp REQUIRED)
 pkg_check_modules(JSONCPP jsoncpp)
-pkg_check_modules(CURLCPP curlcpp)
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -140,7 +138,7 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/main.cpp)
 add_executable(${PROJECT_NAME} src/main.cpp src/region.cpp src/city.cpp src/manager.cpp)
-target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} sqlite3 jsoncpp curlcpp)
+target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} sqlite3 jsoncpp)
 
 add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_gencpp)
 
