@@ -29,7 +29,7 @@ private:
 
     std::vector<std::pair<int, std::string>> _jsonEntries; /** Vector of Postal-City from json file */
     ros::NodeHandle _nh;                                   /** Ros nodehandle */
-    ros::ServiceServer _service;                           /** Ros server checks if the user wants to add a new city */
+    ros::ServiceClient _client;                            /** Ros Client asks to server for full info of a city */
     std::vector<std::pair<City, Region>> _objects;         /** Store pairs City-Region*/
 
     sqlite3 *_db;       /** Pointer to SQLite connection */

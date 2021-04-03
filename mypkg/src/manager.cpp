@@ -5,7 +5,7 @@
 Manager::Manager(const ros::NodeHandle &nh) : _nh(nh)
 {
     ROS_INFO_STREAM("Created Manager");
-    _service = _nh.advertiseService("CreateCity", &Manager::CreateCity, this);
+    _client = _nh.serviceClient<mypkg::AddCityToRegion>("CreateCity");
     InitDatabase();
     LoadJson();
 }
