@@ -24,6 +24,7 @@ private:
     void InitTable();
     void LoadJson();
     void GetFullInfoCities();
+    void InsertCity();
     bool CreateCity(mypkg::AddCityToRegion::Request &req,
                     mypkg::AddCityToRegion::Response &res);
 

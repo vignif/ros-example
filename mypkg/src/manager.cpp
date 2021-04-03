@@ -74,6 +74,8 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName)
     return 0;
 }
 
+void Manager::InsertCity() {}
+
 void Manager::InitTable()
 {
     /* Create SQL statement */

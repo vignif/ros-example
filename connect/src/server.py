@@ -11,7 +11,7 @@ from mypkg.msg import CityInfo
 
 class Server:
     def __init__(self):
-        self.pub = rospy.Publisher("CityInfo", CityInfo, queue_size=10)
+
         self.connect_service()
 
     def connect_service(self):
@@ -28,29 +28,31 @@ class Server:
                 "format": "json",
                 "limit": 1,
             }
-            r = requests.get(
-                "https://nominatim.openstreetmap.org/search?",
-                params=ploads,
-            )
-            json_res = r.json()
-            lat = json_res[0]["lat"]
-            lon = json_res[0]["lon"]
-            region = json_res[0]["display_name"]
-            rospy.logdebug(lat)
+            try:
+                r = requests.get(
+                    "https://nominatim.openstreetmap.org/search?",
+                    params=ploads,
+                )
+                json_res = r.json()
+                lat = json_res[0]["lat"]
+                lon = json_res[0]["lon"]
+                region = json_res[0]["display_name"]
+                rospy.logdebug(region)
 
-            msg = CityInfo()
-
-            msg.city_name = req.city_name
-            msg.region_name = str(region)
-            msg.latitude = float(lat)
-            msg.longitude = float(lon)
-            self.pub.publish(msg)
-
-            res = True
+                response = AddCityToRegionResponse()
+                response.success = True
+                response.city.city_name = req.city_name
+                response.city.postal = req.postal
+                response.city.region_name = str(region)
+                response.city.latitude = float(lat)
+                response.city.longitude = float(lon)
+            except Exception as e:
+                rospy.logerr("Failed to retrieve info of the city! %s", e)
+                response.success = False
         else:
             rospy.logerr("Service content can't be empty!")
-            res = False
-        return AddCityToRegionResponse(res)
+            response.success = False
+        return response
 
 
 if __name__ == "__main__":

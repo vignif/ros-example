@@ -5,3 +5,5 @@ string city_name
 ---
 #response constants
 bool success
+mypkg/CityInfo city
+
