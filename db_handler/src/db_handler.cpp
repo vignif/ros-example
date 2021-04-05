@@ -2,7 +2,6 @@
 
 DatabaseHandler::DatabaseHandler(const ros::NodeHandle &nh) : _nh(nh)
 {
-
     InitDatabase();
 }
 
