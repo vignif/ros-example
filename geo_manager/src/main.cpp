@@ -1,7 +1,7 @@
 #include <ros/ros.h>
 #include <stdio.h>
 
-#include "mypkg/manager.hpp"
+#include "geo_manager/manager.hpp"
 #include "std_msgs/String.h"
 
 int main(int argc, char **argv)

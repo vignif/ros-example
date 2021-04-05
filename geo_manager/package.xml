@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>mypkg</name>
+  <name>geo_manager</name>
   <version>0.0.1</version>
-  <description>The mypkg package</description>
+  <description>The geo_manager package</description>
 
   <maintainer email="vignif@gmail.com">Francesco Vigni</maintainer>
 

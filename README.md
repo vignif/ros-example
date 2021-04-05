@@ -18,11 +18,11 @@ The pairs [city-postal] are passed to the component `server.py` which is adverti
 - Latitude
 - Longitude
 
-These information is packed into the service response and the node `mypkg` is unpacking the data and writing in the database with the schema [id, name, postal, region, latitude, longitude]. The id is autoincremental. A constraint on uniqueness is considering unique the tuple [name, postal].
+These information is packed into the service response and the node `geo_manager` is unpacking the data and writing in the database with the schema [id, name, postal, region, latitude, longitude]. The id is autoincremental. A constraint on uniqueness is considering unique the tuple [name, postal].
 Once this is done, the database can still be filled up with informations of more cities. In order to do so, a ros node or simply the user can publish a proper topic with the pair [city-postal] like:
 
 ```
-rostopic pub /RTCreateCity mypkg/RTCityReq "city_name: 'New York'
+rostopic pub /RTCreateCity geo_manager/RTCityReq "city_name: 'New York'
 postal: 10001"
 ```
 
@@ -74,12 +74,12 @@ source ~/ros_ws/devel/setup.zsh
 
 Now you can fire the two main nodes with:
 ```
-roslaunch mypkg mypkg.launch
+roslaunch geo_manager geo_manager.launch
 ```
 
-The json file located in `mypkg/data/cities.json` is parsed, the information is transmitted to the API which is returning the data [region, latitude, longitude] of the cities listed in the file.
+The json file located in `geo_manager/data/cities.json` is parsed, the information is transmitted to the API which is returning the data [region, latitude, longitude] of the cities listed in the file.
 This information is then written in a database [created at runtime] named `test.db`.
-If you want to change the name of your database you can modify the entry of the `mypkg.launch` file containing the db name.
+If you want to change the name of your database you can modify the entry of the `geo_manager.launch` file containing the db name.
 The schema of the table `cities` is fixed and is managed with the object `Manager`.
 
 ## Versioning

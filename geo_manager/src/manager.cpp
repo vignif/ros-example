@@ -1,11 +1,11 @@
-#include "mypkg/manager.hpp"
+#include "geo_manager/manager.hpp"
 #include <jsoncpp/json/json.h>
 #include <fstream>
 
 Manager::Manager(const ros::NodeHandle &nh) : _nh(nh)
 {
     ROS_INFO_STREAM("Created Manager");
-    _client = _nh.serviceClient<mypkg::AddCityToRegion>("/CreateCity");
+    _client = _nh.serviceClient<geo_manager::AddCityToRegion>("/CreateCity");
 
     _subscriber = _nh.subscribe("/RTCreateCity", 1, &Manager::CreateCityRunTime, this);
 
@@ -20,9 +20,9 @@ Manager::~Manager()
     sqlite3_close(_db);
 }
 
-void Manager::CreateCityRunTime(const mypkg::RTCityReqPtr &req)
+void Manager::CreateCityRunTime(const geo_manager::RTCityReqPtr &req)
 {
-    mypkg::AddCityToRegion srv;
+    geo_manager::AddCityToRegion srv;
     srv.request.city_name = req->city_name;
     srv.request.postal = req->postal;
     _client.waitForExistence();
@@ -43,7 +43,7 @@ void Manager::GetFullInfoCities()
     {
         auto postal = i.first;
         auto name = i.second;
-        mypkg::AddCityToRegion srv;
+        geo_manager::AddCityToRegion srv;
         srv.request.city_name = name;
         srv.request.postal = postal;
 
@@ -62,7 +62,7 @@ void Manager::GetFullInfoCities()
 
 void Manager::InitDatabase()
 {
-    auto path = ros::package::getPath("mypkg");
+    auto path = ros::package::getPath("geo_manager");
     std::string nameDB;
     _nh.getParam("db_name", nameDB);
 
@@ -94,7 +94,7 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName)
     return 0;
 }
 
-void Manager::InsertCity(mypkg::AddCityToRegion::Response &res)
+void Manager::InsertCity(geo_manager::AddCityToRegion::Response &res)
 {
     auto name = res.city.city_name;
     auto postal = res.city.postal;
@@ -155,8 +155,8 @@ void Manager::InitTable()
     }
 }
 
-bool Manager::CreateCity(mypkg::AddCityToRegion::Request &req,
-                         mypkg::AddCityToRegion::Response &res)
+bool Manager::CreateCity(geo_manager::AddCityToRegion::Request &req,
+                         geo_manager::AddCityToRegion::Response &res)
 {
     if (req.city_name.size() > 0 && req.postal > 0)
     {
@@ -174,7 +174,7 @@ void Manager::LoadJson()
 {
     Json::Value root;
     Json::Reader reader;
-    auto path = ros::package::getPath("mypkg");
+    auto path = ros::package::getPath("geo_manager");
     std::string jsonName = "/data/cities.json";
 
     auto fullpath = path + jsonName;

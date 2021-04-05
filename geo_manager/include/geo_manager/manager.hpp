@@ -1,12 +1,12 @@
 #include <iostream>
 #include <memory>
 #include <ros/ros.h>
-#include "mypkg/AddCityToRegion.h"
-#include "mypkg/RTCityReq.h"
+#include "geo_manager/AddCityToRegion.h"
+#include "geo_manager/RTCityReq.h"
 #include "std_msgs/String.h"
 #include <map>
 #include <tuple>
-#include "mypkg/region.hpp"
+#include "geo_manager/region.hpp"
 #include <string>
 #include <sqlite3.h>
 #include <ros/package.h>
@@ -25,10 +25,10 @@ private:
     void InitTable();
     void LoadJson();
     void GetFullInfoCities();
-    void InsertCity(mypkg::AddCityToRegion::Response &res);
-    bool CreateCity(mypkg::AddCityToRegion::Request &req,
-                    mypkg::AddCityToRegion::Response &res);
-    void CreateCityRunTime(const mypkg::RTCityReqPtr &req);
+    void InsertCity(geo_manager::AddCityToRegion::Response &res);
+    bool CreateCity(geo_manager::AddCityToRegion::Request &req,
+                    geo_manager::AddCityToRegion::Response &res);
+    void CreateCityRunTime(const geo_manager::RTCityReqPtr &req);
 
     std::vector<std::pair<int, std::string>> _jsonEntries; /** Vector of Postal-City from json file */
     ros::NodeHandle _nh;                                   /** Ros nodehandle */
