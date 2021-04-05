@@ -9,15 +9,12 @@ Manager::Manager(const ros::NodeHandle &nh) : _nh(nh)
 
     _subscriber = _nh.subscribe("/RTCreateCity", 1, &Manager::CreateCityRunTime, this);
 
-    InitDatabase();
     LoadJson();
     GetFullInfoCities();
 }
 
 Manager::~Manager()
 {
-    ROS_DEBUG("Closing DB");
-    sqlite3_close(_db);
 }
 
 void Manager::CreateCityRunTime(const geo_manager::RTCityReqPtr &req)
@@ -29,7 +26,7 @@ void Manager::CreateCityRunTime(const geo_manager::RTCityReqPtr &req)
     if (_client.call(srv))
     {
         ROS_DEBUG("Insert City %s", srv.response.city.city_name.c_str());
-        InsertCity(srv.response);
+        //InsertCity(srv.response);
     }
     else
     {
@@ -51,107 +48,12 @@ void Manager::GetFullInfoCities()
         if (_client.call(srv))
         {
 
-            InsertCity(srv.response);
+            // InsertCity(srv.response);
         }
         else
         {
             ROS_ERROR_STREAM("failed");
         }
-    }
-}
-
-void Manager::InitDatabase()
-{
-    auto path = ros::package::getPath("geo_manager");
-    std::string nameDB;
-    _nh.getParam("db_name", nameDB);
-
-    auto fullpath = path + nameDB;
-
-    ROS_DEBUG_STREAM("Database located in: " << fullpath);
-
-    _rc = sqlite3_open(fullpath.c_str(), &_db);
-
-    if (_rc)
-    {
-        ROS_ERROR("Can't open database: %s\n", sqlite3_errmsg(_db));
-    }
-    else
-    {
-        ROS_DEBUG("Opened database successfully\n");
-        InitTable();
-    }
-}
-
-static int callback(void *NotUsed, int argc, char **argv, char **azColName)
-{
-    int i;
-    for (i = 0; i < argc; i++)
-    {
-        printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
-    }
-    printf("\n");
-    return 0;
-}
-
-void Manager::InsertCity(geo_manager::AddCityToRegion::Response &res)
-{
-    auto name = res.city.city_name;
-    auto postal = res.city.postal;
-    auto region = res.city.region_name;
-    auto latitude = res.city.latitude;
-    auto longitude = res.city.longitude;
-
-    auto sql = "INSERT INTO cities (id, name, postal, region, latitude, longitude) VALUES ("
-               "NULL, "
-               "'" +
-               name + "', "
-                      "'" +
-               std::to_string(postal) + "', "
-                                        "'" +
-               region + "', "
-                        "'" +
-               std::to_string(latitude) + "', "
-                                          "'" +
-               std::to_string(longitude) + "');";
-
-    /* Execute SQL statement */
-    _rc = sqlite3_exec(_db, sql.c_str(), callback, 0, &_zErrMsg);
-
-    if (_rc != SQLITE_OK)
-    {
-        ROS_ERROR("SQL error: %s", _zErrMsg);
-        sqlite3_free(_zErrMsg);
-    }
-    else
-    {
-        ROS_DEBUG("City %s inserted in DB successfully", name.c_str());
-    }
-}
-
-void Manager::InitTable()
-{
-    /* Create SQL statement */
-    auto sql = "CREATE TABLE IF NOT EXISTS cities("
-               "id INTEGER PRIMARY KEY     NOT NULL,"
-               "name           TEXT    NOT NULL,"
-               "postal         INT     NOT NULL,"
-               "region         TEXT    NOT NULL,"
-               "latitude       FLOAT,"
-               "longitude      FLOAT,"
-               "UNIQUE(name, postal));";
-
-    /* Execute SQL statement */
-    _rc = sqlite3_exec(_db, sql, callback, 0, &_zErrMsg);
-
-    if (_rc != SQLITE_OK)
-    {
-        ROS_ERROR("SQL error: %s", _zErrMsg);
-        sqlite3_free(_zErrMsg);
-    }
-    else
-    {
-        ROS_DEBUG("Table created successfully");
     }
 }
 
