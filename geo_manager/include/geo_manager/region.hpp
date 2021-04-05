@@ -1,7 +1,4 @@
 #include "geo_manager/city.hpp"
-#include <iostream>
-#include <memory>
-#include <ros/ros.h>
 
 class Region : public Entity
 {

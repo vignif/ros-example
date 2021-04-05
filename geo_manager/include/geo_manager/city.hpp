@@ -1,6 +1,3 @@
-#include <iostream>
-#include <memory>
-#include <ros/ros.h>
 #include "geo_manager/Entity.hpp"
 
 class City : public Entity

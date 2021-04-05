@@ -1,15 +1,7 @@
-#include <iostream>
-#include <memory>
-#include <ros/ros.h>
 #include "geo_manager/AddCityToRegion.h"
 #include "geo_manager/RTCityReq.h"
-#include "std_msgs/String.h"
-#include <map>
-#include <tuple>
 #include "geo_manager/region.hpp"
-#include <ros/package.h>
 #include <vector>
-#include <string>
 
 class Manager
 {

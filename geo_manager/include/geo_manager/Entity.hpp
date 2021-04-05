@@ -1,4 +1,7 @@
 #include <iostream>
+#include <ros/ros.h>
+#include <ros/package.h>
+#include <vector>
 
 class Entity
 {

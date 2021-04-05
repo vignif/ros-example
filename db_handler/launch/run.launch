@@ -1,5 +1,9 @@
 <launch>
+<env name="ROSCONSOLE_CONFIG_FILE" value="$(find geo_manager)../config/rosconsole.conf"/>  
+<env name="ROSCONSOLE_FORMAT" value="[${severity}] [${time}] [${node}]: ${message}"/>
+  
 <node name="db_handler" pkg="db_handler" type="db_handler" output="screen" >
-    <param name="db_name" value="/test.db"/>
-  </node>
+  <param name="db_name" value="/test.db"/>
+</node>
+
 </launch>
