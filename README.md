@@ -1,5 +1,7 @@
 # The Great C++ & Python Ros Example
 
+Catkin build status:
+
 [![Build Actions Status](https://github.com/vignif/ros-example/workflows/Build/badge.svg)](https://github.com/vignif/ros-example/actions)
 
 This repository wants to explore with a practical approach the paradigms in the middleware ROS (Robotic Operating System) while connecting ROS with external functionalities. It contains different packages exploring the ROS components:
