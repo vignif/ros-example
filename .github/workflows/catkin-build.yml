@@ -7,31 +7,43 @@ env:
 
 jobs:
   build:
-    strategy:
-      matrix:
-        container: ["ros:melodic", "ros:noetic"]
+    # strategy:
+    #   matrix:
+    #     container: ["ros:melodic-ros-base", "ros:noetic-ros-base"]
+    container: ros:noetic-ros-base
     runs-on: ubuntu-20.04
-    container: ${{ matrix.container }}
+    # container: ${{ matrix.container }}
 
     steps:
-      - name: update git
+      - uses: actions/checkout@v1
+      - name: Install catkin & package dependencies
         run: |
-          apt-get update 
-          apt-get install -y software-properties-common
-          add-apt-repository ppa:git-core/ppa
+          cd / && ./ros_entrypoint.sh
           apt-get update
-          apt-get install -y git
+          apt-get install -y python3-catkin-lint python3-pip
+          pip3 install osrf-pycommon
+          apt-get install -y ros-noetic-catkin python3-catkin-tools
+
+      - name: Setup catkin workspace
+        run: |
+          mkdir -p ~/catkin_ws/src
+          cd ~/catkin_ws
+          /bin/bash -c "source /opt/ros/noetic/setup.bash && catkin build"
 
       - name: rosdep install
         run: |
           apt-get update
           rosdep update
+          /bin/bash -c "pwd"
+          /bin/bash -c "ls" 
           rosdep install --from-paths src --ignore-src -r -y
+
       - name: catkin build
         shell: bash
         run: |
           source /opt/ros/$ROS_DISTRO/setup.bash
           catkin build -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+
       - name: catkin build run_tests
         shell: bash
         run: |
