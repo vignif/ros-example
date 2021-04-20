@@ -44,6 +44,6 @@ jobs:
           mv ros-example src
           catkin build -DCMAKE_BUILD_TYPE=$BUILD_TYPE
           echo "first build ok"
-          catkin build --verbose --catkin-make-args run_tests
-          echo "second build ok"
-          catkin_test_results
+          # catkin build --verbose --catkin-make-args run_tests
+          # echo "second build ok"
+          # catkin_test_results
