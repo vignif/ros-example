@@ -1,6 +1,9 @@
 # The Great C++ & Python Ros Example
 
-Complete example of ROS package - C++ & Python
+This repository wants to explore with a practical approach the paradigms in the middleware ROS (Robotic Operating System) while connecting ROS with external functionalities. It contains different packages exploring the ROS components:
+- topics
+- services
+
 When the project starts a json file is parsed. The file contains entries like:
 ```json
 {
@@ -8,29 +11,26 @@ When the project starts a json file is parsed. The file contains entries like:
         {
             "name": "Forli",
             "postal": 47122
+        },
+        {
+            
         }
     ]
 }
 ```
-The pairs [city-postal] are passed to the component `server.py` which is advertising a Service named `CreateCity`. Once the component `server.py` receives this information it queries an API for retrieving geo information [link](https://nominatim.openstreetmap.org) and is interpreting the response of the API. The response contains the relevnant information of each city like:
+The pairs [city-postal] are passed to the component `server.py` which is advertising a Service named `CreateCity`. Once the component `server.py` receives this information it queries an API for retrieving geo information [link](https://nominatim.openstreetmap.org) and is interpreting the response of the API. The response contains the relevant information of each city like:
 - Region
 - Latitude
 - Longitude
 
 These information is packed into the service response and the node `geo_manager` is unpacking the data and writing in the database with the schema [id, name, postal, region, latitude, longitude]. The id is autoincremental. A constraint on uniqueness is considering unique the tuple [name, postal].
+
 Once this is done, the database can still be filled up with information of more cities. In order to do so, a ros node or simply the user can publish a proper topic with the pair [city-postal] like:
 
 ```
 rostopic pub /RTCreateCity geo_manager/RTCityReq "city_name: 'New York'
 postal: 10001"
 ```
-
-
-## Getting Started
-
-This repository wants to explore with a practical approach the paradigms in the middleware ROS (Robotic Operating System) while connecting ROS with external functionalities. It contains different packages exploring the ROS components:
-- topics
-- services
 
 ## Outside ROS
 The project also contains:
