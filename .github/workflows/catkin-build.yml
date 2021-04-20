@@ -29,13 +29,6 @@ jobs:
           mkdir -p ~/catkin_ws/src
           cd ~/catkin_ws
           /bin/bash -c "source /opt/ros/noetic/setup.bash && catkin build"
-          pwd
-          ls
-
-      - name: rosdep install
-        run: |
-          pwd
-          ls
           apt-get update
           rosdep update
           rosdep install --from-paths src --ignore-src -r -y
