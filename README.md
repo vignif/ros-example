@@ -81,6 +81,12 @@ This information is then written in a database [created at runtime] named `test.
 If you want to change the name of your database you can modify the entry of the `geo_manager.launch` file containing the db name.
 The schema of the table `cities` is fixed and is managed with the object `Manager`.
 
+## Unit Tests
+Run the unit tests using the [Catkin Command Line Tools](http://catkin-tools.readthedocs.io/en/latest/index.html#)
+
+```catkin build geo_manager --no-deps --verbose --catkin-make-args run_tests```
+You will see the image above popping up.
+
 ## Versioning
 
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/vignif/ros-example/tags). 
