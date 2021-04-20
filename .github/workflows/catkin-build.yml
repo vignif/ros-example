@@ -36,8 +36,6 @@ jobs:
       - name: catkin build
         shell: bash
         run: |
-          pwd
-          ls
           apt-get install libjsoncpp-dev 
           ln -s /usr/include/jsoncpp/json/ /usr/include/json
           source /opt/ros/$ROS_DISTRO/setup.bash
@@ -50,5 +48,7 @@ jobs:
         shell: bash
         run: |
           source /opt/ros/$ROS_DISTRO/setup.bash
+          cd .. 
+          mv ros-example src
           catkin build --verbose --catkin-make-args run_tests
           catkin_test_results
