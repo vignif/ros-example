@@ -38,6 +38,8 @@ jobs:
         run: |
           pwd
           ls
+          apt-get install libjsoncpp-dev 
+          ln -s /usr/include/jsoncpp/json/ /usr/include/json
           source /opt/ros/$ROS_DISTRO/setup.bash
           echo "sourced setup"
           cd .. 
