@@ -43,12 +43,7 @@ jobs:
           cd .. 
           mv ros-example src
           catkin build -DCMAKE_BUILD_TYPE=$BUILD_TYPE
-
-      - name: catkin build run_tests
-        shell: bash
-        run: |
-          source /opt/ros/$ROS_DISTRO/setup.bash
-          cd .. 
-          mv ros-example src
+          echo "first build ok"
           catkin build --verbose --catkin-make-args run_tests
+          echo "second build ok"
           catkin_test_results
