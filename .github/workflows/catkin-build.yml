@@ -47,3 +47,4 @@ jobs:
           # catkin build --verbose --catkin-make-args run_tests
           # echo "second build ok"
           # catkin_test_results
+          mv src ros-example
