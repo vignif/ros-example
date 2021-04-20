@@ -86,7 +86,6 @@ Run the unit tests using the [Catkin Command Line Tools](http://catkin-tools.rea
 
 ```catkin build geo_manager --no-deps --verbose --catkin-make-args run_tests```
 
-
 ## Versioning
 
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/vignif/ros-example/tags). 
