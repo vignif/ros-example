@@ -34,9 +34,9 @@ jobs:
         run: |
           apt-get update
           rosdep update
-          /bin/bash -c "pwd"
+          /bin/bash -c "cd .."
           /bin/bash -c "ls" 
-          rosdep install --from-paths src --ignore-src -r -y
+          rosdep install --from-paths ros-example --ignore-src -r -y
 
       - name: catkin build
         shell: bash
