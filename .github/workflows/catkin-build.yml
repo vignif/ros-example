@@ -37,7 +37,7 @@ jobs:
           cd ..
           pwd
           ls
-          rosdep install --from-paths src --ignore-src -r -y
+          rosdep install --from-paths ros-example --ignore-src -r -y
 
       - name: catkin build
         shell: bash
