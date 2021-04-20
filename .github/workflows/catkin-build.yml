@@ -34,6 +34,8 @@ jobs:
         run: |
           apt-get update
           rosdep update
+          ls
+          pwd
           mv ros-example src
           rosdep install --from-paths src --ignore-src -r -y
 
