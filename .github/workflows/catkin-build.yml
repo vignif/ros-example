@@ -14,6 +14,7 @@ jobs:
     container: ${{ matrix.container }}
 
     steps:
+      - uses: actions/checkout@v1
       - name: update git
         run: |
           apt-get update 
@@ -27,11 +28,13 @@ jobs:
           apt-get update
           rosdep update
           rosdep install --from-paths src --ignore-src -r -y
+
       - name: catkin build
         shell: bash
         run: |
           source /opt/ros/$ROS_DISTRO/setup.bash
           catkin build -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+
       - name: catkin build run_tests
         shell: bash
         run: |
