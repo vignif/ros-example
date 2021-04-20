@@ -8,6 +8,9 @@ When the project starts a json file is parsed. The file contains entries like:
         {
             "name": "Forli",
             "postal": 47122
+        },
+        {
+            
         }
     ]
 }
