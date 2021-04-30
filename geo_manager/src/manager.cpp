@@ -6,7 +6,6 @@ Manager::Manager(const ros::NodeHandle &nh) : _nh(nh)
 {
     ROS_INFO_STREAM("Created Manager");
     _client = _nh.serviceClient<geo_manager::AddCityToRegion>("/CreateCity");
-
     _subscriber = _nh.subscribe("/RTCreateCity", 1, &Manager::CreateCityRunTime, this);
 
     LoadJson();
@@ -64,7 +63,6 @@ bool Manager::CreateCity(geo_manager::AddCityToRegion::Request &req,
     {
         auto city = City(req.city_name);
 
-        // _objects.push_back(std::make_pair(city, region));
         ShowState();
         return true;
     }
@@ -81,7 +79,7 @@ void Manager::LoadJson()
 
     auto fullpath = path + jsonName;
 
-    std::ifstream ifs(fullpath); //open file example.json
+    std::ifstream ifs(fullpath);
 
     if (!reader.parse(ifs, root))
     {
