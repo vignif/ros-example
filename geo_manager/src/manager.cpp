@@ -5,9 +5,9 @@
 Manager::Manager(const ros::NodeHandle &nh) : _nh(nh)
 {
     ROS_INFO_STREAM("Created Manager");
-    _client = _nh.serviceClient<geo_manager::AddCityToRegion>("/CreateCity");
+    _client = _nh.serviceClient<shared_msgs::AddCityToRegion>("/CreateCity");
     _subscriber = _nh.subscribe("/RTCreateCity", 1, &Manager::CreateCityRunTime, this);
-
+    // _db = std::move(std::make_unique<DatabaseHandler>(_nh));
     LoadJson();
     GetFullInfoCities();
 }
@@ -16,16 +16,18 @@ Manager::~Manager()
 {
 }
 
-void Manager::CreateCityRunTime(const geo_manager::RTCityReqPtr &req)
+void Manager::CreateCityRunTime(const shared_msgs::RTCityReqPtr &req)
 {
-    geo_manager::AddCityToRegion srv;
+    shared_msgs::AddCityToRegion srv;
     srv.request.city_name = req->city_name;
     srv.request.postal = req->postal;
     _client.waitForExistence();
     if (_client.call(srv))
     {
         ROS_DEBUG("Insert City %s", srv.response.city.city_name.c_str());
-        //InsertCity(srv.response);
+        auto city = City(srv.response.city.city_name.c_str());
+
+        // _db->InsertCity(city);
     }
     else
     {
@@ -39,7 +41,7 @@ void Manager::GetFullInfoCities()
     {
         auto postal = i.first;
         auto name = i.second;
-        geo_manager::AddCityToRegion srv;
+        shared_msgs::AddCityToRegion srv;
         srv.request.city_name = name;
         srv.request.postal = postal;
 
@@ -56,8 +58,8 @@ void Manager::GetFullInfoCities()
     }
 }
 
-bool Manager::CreateCity(geo_manager::AddCityToRegion::Request &req,
-                         geo_manager::AddCityToRegion::Response &res)
+bool Manager::CreateCity(shared_msgs::AddCityToRegion::Request &req,
+                         shared_msgs::AddCityToRegion::Response &res)
 {
     if (req.city_name.size() > 0 && req.postal > 0)
     {

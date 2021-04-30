@@ -5,5 +5,5 @@ string city_name
 ---
 #response constants
 bool success
-geo_manager/CityInfo city
+shared_msgs/CityInfo city
 

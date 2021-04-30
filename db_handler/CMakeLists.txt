@@ -16,7 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 find_package(SQLite3 REQUIRED)
 
-find_package(geo_manager REQUIRED)
+find_package(shared_msgs REQUIRED)
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -119,6 +119,7 @@ include_directories(
  include
   ${catkin_INCLUDE_DIRS}
   ${geo_manager_INCLUDE_DIRS}
+  ${shared_msgs_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library

@@ -3,6 +3,7 @@ project(geo_manager)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++11)
+set(CMAKE_CXX_STANDARD 14)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -11,9 +12,9 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
-  message_generation
   roslib
-  
+  shared_msgs
+  db_handler
 )
 find_package(PkgConfig REQUIRED)
 
@@ -54,21 +55,6 @@ pkg_check_modules(JSONCPP jsoncpp)
 ##   * uncomment the generate_messages entry below
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
-## Generate messages in the 'msg' folder
- add_message_files(
-   FILES
-   CityInfo.msg
-   RTCityReq.msg
-#   Message2.msg
-)
-
-## Generate services in the 'srv' folder
-add_service_files(
-  FILES
-AddCityToRegion.srv
-#   Service1.srv
-#   Service2.srv
-)
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -76,12 +62,6 @@ AddCityToRegion.srv
 #   Action1.action
 #   Action2.action
 # )
-
-## Generate added messages and services with any dependencies listed here
- generate_messages(
-   DEPENDENCIES
-   std_msgs
- )
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -115,7 +95,7 @@ AddCityToRegion.srv
 
 catkin_package(
   INCLUDE_DIRS include 
-  CATKIN_DEPENDS roscpp std_msgs roslib )
+  CATKIN_DEPENDS roscpp std_msgs roslib)
 
 
 ###########
@@ -128,7 +108,7 @@ include_directories(
  include
   ${catkin_INCLUDE_DIRS}
   ${JSONCPP_INCLUDE_DIRS}
- # ${db_handler_INCLUDE_DIRS}
+  ${db_handler_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -152,8 +132,6 @@ target_link_libraries(
   ${catkin_LIBRARIES} 
   jsoncpp
 )
-
-add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_gencpp)
 
 
 ## Rename C++ executable without prefix

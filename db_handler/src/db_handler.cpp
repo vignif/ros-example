@@ -45,7 +45,7 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName)
     return 0;
 }
 
-void DatabaseHandler::InsertCity(geo_manager::CityInfo &city)
+void DatabaseHandler::InsertCity(shared_msgs::CityInfo &city)
 {
 
     auto name = city.city_name;
