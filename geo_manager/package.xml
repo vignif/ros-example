@@ -33,7 +33,7 @@
   <exec_depend>shared_msgs</exec_depend>
   <build_depend>db_handler</build_depend>
 
-
+  <test_depend>rosunit</test_depend>
   <test_depend>gtest</test_depend>
 
 </package>

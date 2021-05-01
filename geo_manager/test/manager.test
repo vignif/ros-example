@@ -1,0 +1,4 @@
+<launch>
+  <node pkg="geo_manager" type="geo_manager" name="geo_manager" />
+  <test test-name="test_manager" pkg="geo_manager" type="geo_manager-test" />
+</launch>
