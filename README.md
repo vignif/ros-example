@@ -30,7 +30,7 @@ Note most of the postal entries are zero, this is due to the design of the api w
 rostopic pub /RTCreateCity geo_manager/RTCityReq "city_name: 'New York'
 postal: 10001"
 ```
-4. Visualize in a browser the cities in contained in the database with `rostopic pub /render_cities std_msgs/Empty "{}"`
+4. Visualize in a browser the cities stored in the database with `rostopic pub /render_cities std_msgs/Empty "{}"`
 
 ## Outside ROS
 The project also contains:
@@ -39,9 +39,10 @@ The project also contains:
 - Interface to a remote API [nominatim](https://nominatim.openstreetmap.org)
 
 ## How to install
-Given your catkin workspace `~/ros_ws`, clone the current repository with:
+Given your catkin workspace `~/ros_ws`, clone the current repository in it with:
 
 ```
+cd ~/ros_ws
 git clone git@github.com:vignif/ros-example.git src
 ```
 
