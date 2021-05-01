@@ -23,13 +23,14 @@ Note most of the postal entries are zero, this is due to the design of the api w
 2. The following nodes are running
 - `geo_manager`
 - `api_handler`
+- `show`
 3. The user or a node can request to add a new city to the database via the topic `/RTCreateCity` with:
 
 ```
 rostopic pub /RTCreateCity geo_manager/RTCityReq "city_name: 'New York'
 postal: 10001"
 ```
-4. Visualize in a browser the cities in contained in the database with `rosrun show show.py`
+4. Visualize in a browser the cities in contained in the database with `rostopic pub /render_cities std_msgs/Empty "{}"`
 
 ## Outside ROS
 The project also contains:
