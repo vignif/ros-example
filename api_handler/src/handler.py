@@ -11,7 +11,6 @@ from shared_msgs.msg import CityInfo
 
 class Server:
     def __init__(self):
-
         self.connect_service()
 
     def connect_service(self):

@@ -26,7 +26,7 @@ void Manager::CreateCityRunTime(const shared_msgs::RTCityReqPtr &req)
     _client.waitForExistence();
     if (_client.call(srv))
     {
-        ROS_DEBUG("Insert City %s", srv.response.city.city_name.c_str());
+        // ROS_DEBUG("Insert City %s", srv.response.city.city_name.c_str());
         CreateCity(srv.response.city);
     }
     else
