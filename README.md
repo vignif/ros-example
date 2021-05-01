@@ -4,37 +4,32 @@ Catkin build status:
 
 [![Build Actions Status](https://github.com/vignif/ros-example/workflows/Build/badge.svg)](https://github.com/vignif/ros-example/actions)
 
-This repository wants to explore with a practical approach the paradigms in the middleware ROS (Robotic Operating System) while connecting ROS with external functionalities. It contains different packages exploring the ROS components:
-- topics
-- services
+This repository wants to explore with a practical approach the paradigms in the middleware ROS (Robotic Operating System) while connecting ROS with external functionalities.
 
-When the project starts a json file is parsed. The file contains entries like:
-```json
-{
-    "cities": [
-        {
-            "name": "Forli",
-            "postal": 47122
-        },
-        {
-            
-        }
-    ]
-}
-```
-The pairs [city-postal] are passed to the component `server.py` which is advertising a Service named `CreateCity`. Once the component `server.py` receives this information it queries an API for retrieving geo information [link](https://nominatim.openstreetmap.org) and is interpreting the response of the API. The response contains the relevant information of each city like:
-- Region
-- Latitude
-- Longitude
+A script can render a map with a marker per each city in the database.
 
-These information is packed into the service response and the node `geo_manager` is unpacking the data and writing in the database with the schema [id, name, postal, region, latitude, longitude]. The id is autoincremental. A constraint on uniqueness is considering unique the tuple [name, postal].
+![map](.figures/map.png)
 
-Once this is done, the database can still be filled up with information of more cities. In order to do so, a ros node or simply the user can publish a proper topic with the pair [city-postal] like:
+The information in the database can be explored with a software like [sqlite browser](https://sqlitebrowser.org/) obtaining something like:
+
+![db](.figures/db.png)
+
+Note most of the postal entries are zero, this is due to the design of the api which is not returning the postal code. The value can be stored via providing it as input in a ros message.
+
+## Information flow
+1. When launching the main script `roslaunch geo_manager Manager.launch`
+- A database is created (if doesn't exist) and filled with proper table schema
+- A json file is parsed and is propagated as an api request. The api response is handled and stored in the db.
+2. The following nodes are running
+- `geo_manager`
+- `api_handler`
+3. The user or a node can request to add a new city to the database via the topic `/RTCreateCity` with:
 
 ```
 rostopic pub /RTCreateCity geo_manager/RTCityReq "city_name: 'New York'
 postal: 10001"
 ```
+4. Visualize in a browser the cities in contained in the database with `rosrun show show.py`
 
 ## Outside ROS
 The project also contains:
@@ -58,7 +53,7 @@ rosdep install --from-paths src --ignore-src -r -y
 Build the project with catkin using:
 
 ```
-catkin_make
+catkin build
 ```
 
 ## How to run
@@ -77,18 +72,18 @@ source ~/ros_ws/devel/setup.zsh
 
 Now you can fire the two main nodes with:
 ```
-roslaunch geo_manager geo_manager.launch
+roslaunch geo_manager Manager.launch
 ```
 
-The json file located in `geo_manager/data/cities.json` is parsed, the information is transmitted to the API which is returning the data [region, latitude, longitude] of the cities listed in the file.
-This information is then written in a database [created at runtime] named `test.db`.
-If you want to change the name of your database you can modify the entry of the `geo_manager.launch` file containing the db name.
+If you want to change the name of your database you can modify the entry of the `Manager.launch` file containing the db name.
 The schema of the table `cities` is fixed and is managed with the object `Manager`.
 
 ## Unit Tests
 Run the unit tests using the [Catkin Command Line Tools](http://catkin-tools.readthedocs.io/en/latest/index.html#)
 
-```catkin build geo_manager --no-deps --verbose --catkin-make-args run_tests```
+```
+catkin build geo_manager --no-deps --verbose --catkin-make-args run_tests
+```
 
 ## Versioning
 
