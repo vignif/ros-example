@@ -20,7 +20,7 @@ class DatabaseHandler
 public:
     DatabaseHandler(const ros::NodeHandle &nh);
     ~DatabaseHandler();
-    void InsertCity(const shared_msgs::CityInfo &city);
+    bool InsertCity(const shared_msgs::CityInfo &city);
 
 private:
     void InitDatabase();

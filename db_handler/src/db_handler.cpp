@@ -53,7 +53,7 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName)
     return 0;
 }
 
-void DatabaseHandler::InsertCity(const shared_msgs::CityInfo &city)
+bool DatabaseHandler::InsertCity(const shared_msgs::CityInfo &city)
 {
     auto name = city.city_name;
     auto postal = city.postal;
@@ -81,10 +81,12 @@ void DatabaseHandler::InsertCity(const shared_msgs::CityInfo &city)
     {
         ROS_ERROR("SQL error: %s", _zErrMsg);
         sqlite3_free(_zErrMsg);
+        return false;
     }
     else
     {
         ROS_DEBUG("City %s inserted in DB successfully", name.c_str());
+        return true;
     }
 }
 

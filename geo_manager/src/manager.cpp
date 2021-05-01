@@ -9,12 +9,12 @@ Manager::Manager(const ros::NodeHandle &nh) : _nh(nh)
     _subscriber = _nh.subscribe("/RTCreateCity", 1, &Manager::CreateCityRunTime, this);
     _db = std::move(std::make_unique<DatabaseHandler>(_nh));
     LoadJson();
-    GetFullInfoCities();
+    InitDBwithCities();
 }
 
 Manager::~Manager()
 {
-    // _db.~DatabaseHandler();
+    _db->~DatabaseHandler();
     ROS_ERROR("Destroy Manager");
 }
 
@@ -27,8 +27,7 @@ void Manager::CreateCityRunTime(const shared_msgs::RTCityReqPtr &req)
     if (_client.call(srv))
     {
         ROS_DEBUG("Insert City %s", srv.response.city.city_name.c_str());
-        auto city = City(srv.response.city.city_name.c_str());
-        _db->InsertCity(srv.response.city);
+        CreateCity(srv.response.city);
     }
     else
     {
@@ -36,7 +35,7 @@ void Manager::CreateCityRunTime(const shared_msgs::RTCityReqPtr &req)
     }
 }
 
-void Manager::GetFullInfoCities()
+void Manager::InitDBwithCities()
 {
     for (auto i : _jsonEntries)
     {
@@ -45,12 +44,11 @@ void Manager::GetFullInfoCities()
         shared_msgs::AddCityToRegion srv;
         srv.request.city_name = name;
         srv.request.postal = postal;
-
         _client.waitForExistence();
+
         if (_client.call(srv))
         {
-
-            _db->InsertCity(srv.response.city);
+            CreateCity(srv.response.city);
         }
         else
         {
@@ -59,16 +57,14 @@ void Manager::GetFullInfoCities()
     }
 }
 
-bool Manager::CreateCity(shared_msgs::AddCityToRegion::Request &req,
-                         shared_msgs::AddCityToRegion::Response &res)
+bool Manager::CreateCity(const shared_msgs::CityInfo &city)
 {
-    if (req.city_name.size() > 0 && req.postal > 0)
+    if (_db->InsertCity(city))
     {
-        auto city = City(req.city_name);
-        ShowState();
+        _cities.push_back(City{city});
         return true;
     }
-
+    ShowState();
     return false;
 }
 
@@ -99,8 +95,8 @@ void Manager::LoadJson()
 
 void Manager::ShowState()
 {
-    for (auto obj : _objects)
+    for (auto obj : _cities)
     {
-        ROS_INFO("City %s in Region %s", obj.first.GetName(), obj.second.GetName());
+        ROS_INFO("City %s in Coordinates %s", obj.GetName(), obj.GetCoordinates().c_str());
     }
 }
