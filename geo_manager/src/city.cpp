@@ -11,5 +11,5 @@ City::City(const shared_msgs::CityInfo &city) : Entity(city.city_name)
 
 std::string City::GetCoordinates()
 {
-    return std::to_string(_lat) + std::to_string(_lon);
+    return std::to_string(_lat) + " " + std::to_string(_lon);
 }
