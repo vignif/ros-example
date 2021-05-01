@@ -55,16 +55,16 @@ void Manager::InitDBwithCities()
             ROS_ERROR_STREAM("failed");
         }
     }
+    ShowState();
 }
 
 bool Manager::CreateCity(const shared_msgs::CityInfo &city)
 {
+    _cities.push_back(City{city});
     if (_db->InsertCity(city))
     {
-        _cities.push_back(City{city});
         return true;
     }
-    ShowState();
     return false;
 }
 
