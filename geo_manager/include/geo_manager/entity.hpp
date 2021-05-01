@@ -6,10 +6,9 @@
 class Entity
 {
 public:
-    Entity(std::string name) : _name(name)
-    {
-        ROS_DEBUG("Created Entity");
-    };
+    Entity(std::string name) : _name(name){
+                                   // ROS_DEBUG("Created Entity");
+                               };
     ~Entity(){};
     const char *GetName()
     {
