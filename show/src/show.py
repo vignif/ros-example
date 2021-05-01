@@ -34,14 +34,15 @@ class Show:
                 lon=self.df["longitude"],
                 lat=self.df["latitude"],
                 text=self.df["name"],
-                mode="markers",
-            )
+                marker=dict(color="red", size=10),
+            ),
         )
 
         fig.update_layout(
             title='City in database of ros example<br>(Hover for city names)<br> <a href="https://github.com/vignif/ros-example">link</a>',
-            geo_scope="europe",
+            geo_scope="world",
         )
+        fig.update_geos(projection_type="natural earth")
         fig.show()
 
 
