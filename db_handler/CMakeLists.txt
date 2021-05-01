@@ -108,7 +108,8 @@ find_package(shared_msgs REQUIRED)
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include 
-  CATKIN_DEPENDS roscpp std_msgs roslib)
+  CATKIN_DEPENDS roscpp std_msgs roslib
+  LIBRARIES ${PROJECT_NAME})
 ###########
 ## Build ##
 ###########
@@ -192,6 +193,7 @@ install(TARGETS ${PROJECT_NAME}
 install(
   DIRECTORY include/${PROJECT_NAME}/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+  PATTERN ".svn" EXCLUDE
 )
 
 ## Mark cpp header files for installation
