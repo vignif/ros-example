@@ -3,6 +3,11 @@
 DatabaseHandler::DatabaseHandler(const ros::NodeHandle &nh) : _nh(nh)
 {
     InitDatabase();
+    GetCities();
+    // for (auto c : _cities)
+    // {
+    //     ROS_ERROR_STREAM(c.city_name << "  " << c.region_name << "  " << c.latitude << "  " << c.longitude << "  " << c.postal);
+    // }
 }
 
 DatabaseHandler::~DatabaseHandler()
@@ -53,6 +58,32 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName)
     return 0;
 }
 
+void DatabaseHandler::InitTable()
+{
+    /* Create SQL statement */
+    auto sql = "CREATE TABLE IF NOT EXISTS cities("
+               "id INTEGER PRIMARY KEY     NOT NULL,"
+               "name           TEXT    NOT NULL,"
+               "postal         INT     NOT NULL,"
+               "region         TEXT    NOT NULL,"
+               "latitude       FLOAT,"
+               "longitude      FLOAT,"
+               "UNIQUE(name, postal));";
+
+    /* Execute SQL statement */
+    _rc = sqlite3_exec(_db, sql, callback, 0, &_zErrMsg);
+
+    if (_rc != SQLITE_OK)
+    {
+        ROS_ERROR("SQL error: %s", _zErrMsg);
+        sqlite3_free(_zErrMsg);
+    }
+    else
+    {
+        ROS_DEBUG("Table created successfully");
+    }
+}
+
 bool DatabaseHandler::InsertCity(const shared_msgs::CityInfo &city)
 {
     auto name = city.city_name;
@@ -90,20 +121,28 @@ bool DatabaseHandler::InsertCity(const shared_msgs::CityInfo &city)
     }
 }
 
-void DatabaseHandler::InitTable()
+int DatabaseHandler::CallbackGetCities(void *NotUsed, int argc, char **argv, char **azColName)
 {
-    /* Create SQL statement */
-    auto sql = "CREATE TABLE IF NOT EXISTS cities("
-               "id INTEGER PRIMARY KEY     NOT NULL,"
-               "name           TEXT    NOT NULL,"
-               "postal         INT     NOT NULL,"
-               "region         TEXT    NOT NULL,"
-               "latitude       FLOAT,"
-               "longitude      FLOAT,"
-               "UNIQUE(name, postal));";
+
+    auto *cities = static_cast<std::vector<shared_msgs::CityInfo> *>(NotUsed);
+
+    shared_msgs::CityInfo city;
+    city.city_name = argv[1] ? argv[1] : "(NULL)";
+    city.postal = std::atoi(argv[2] ? argv[2] : "(NULL)");
+    city.region_name = (argv[3] ? argv[3] : "(NULL)");
+    city.latitude = std::stof(argv[4]);
+    city.longitude = std::stof(argv[5]);
+    cities->push_back(city);
+
+    return 0;
+}
+
+std::vector<shared_msgs::CityInfo> DatabaseHandler::GetCities()
+{
+    auto sql = "SELECT * FROM `cities`;";
 
     /* Execute SQL statement */
-    _rc = sqlite3_exec(_db, sql, callback, 0, &_zErrMsg);
+    _rc = sqlite3_exec(_db, sql, CallbackGetCities, &_cities, &_zErrMsg);
 
     if (_rc != SQLITE_OK)
     {
@@ -112,6 +151,7 @@ void DatabaseHandler::InitTable()
     }
     else
     {
-        ROS_DEBUG("Table created successfully");
+        ROS_DEBUG("Query executed correctly");
     }
+    return _cities;
 }

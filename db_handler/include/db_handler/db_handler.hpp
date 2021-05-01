@@ -7,6 +7,7 @@
 #include <memory>
 #include <ros/ros.h>
 #include "shared_msgs/AddCityToRegion.h"
+#include "shared_msgs/CityInfo.h"
 
 #include "std_msgs/String.h"
 #include <map>
@@ -21,10 +22,14 @@ public:
     DatabaseHandler(const ros::NodeHandle &nh);
     ~DatabaseHandler();
     bool InsertCity(const shared_msgs::CityInfo &city);
+    std::vector<shared_msgs::CityInfo> GetCities();
 
 private:
     void InitDatabase();
     void InitTable();
+    std::vector<shared_msgs::CityInfo> _cities;
+    static int CallbackGetCities(void *NotUsed, int argc, char **argv, char **azColName);
+
     ros::NodeHandle _nh; /** Ros nodehandle */
     sqlite3 *_db;        /** Pointer to SQLite connection */
     char *_zErrMsg = 0;  /** Save any error messages */
