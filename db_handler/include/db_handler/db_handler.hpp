@@ -20,11 +20,11 @@ class DatabaseHandler
 public:
     DatabaseHandler(const ros::NodeHandle &nh);
     ~DatabaseHandler();
+    void InsertCity(const shared_msgs::CityInfo &city);
 
 private:
     void InitDatabase();
     void InitTable();
-    void InsertCity(shared_msgs::CityInfo &city);
     ros::NodeHandle _nh; /** Ros nodehandle */
     sqlite3 *_db;        /** Pointer to SQLite connection */
     char *_zErrMsg = 0;  /** Save any error messages */
