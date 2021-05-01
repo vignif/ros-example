@@ -3,11 +3,6 @@
 DatabaseHandler::DatabaseHandler(const ros::NodeHandle &nh) : _nh(nh)
 {
     InitDatabase();
-    GetCities();
-    // for (auto c : _cities)
-    // {
-    //     ROS_ERROR_STREAM(c.city_name << "  " << c.region_name << "  " << c.latitude << "  " << c.longitude << "  " << c.postal);
-    // }
 }
 
 DatabaseHandler::~DatabaseHandler()

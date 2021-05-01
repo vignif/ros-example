@@ -60,7 +60,6 @@ void Manager::InitDBwithCities()
 
 bool Manager::CreateCity(const shared_msgs::CityInfo &city)
 {
-    _cities.push_back(City{city});
     if (_db->InsertCity(city))
     {
         return true;
@@ -96,8 +95,10 @@ void Manager::LoadJson()
 void Manager::ShowState()
 {
     ROS_DEBUG("Current DB entries:");
-    for (auto obj : _cities)
+
+    for (auto obj : _db->GetCities())
     {
-        ROS_INFO("City %s \tin Coordinates %s", obj.GetName(), obj.GetCoordinates().c_str());
+        _cities.push_back(City{obj});
+        ROS_INFO("City %s \t at %s", _cities.back().GetName(), _cities.back().GetCoordinates().c_str());
     }
 }
