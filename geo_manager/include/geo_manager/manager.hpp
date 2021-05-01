@@ -24,5 +24,6 @@ private:
     ros::ServiceClient _client;                            /** Ros Client asks to server for full info of a city */
     ros::Subscriber _subscriber;
     std::vector<std::pair<City, Region>> _objects; /** Store pairs City-Region*/
-    // std::unique_ptr<DatabaseHandler> _db;
+    std::unique_ptr<DatabaseHandler> _db;
+    // DatabaseHandler _db;
 };

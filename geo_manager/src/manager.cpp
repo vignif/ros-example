@@ -7,13 +7,15 @@ Manager::Manager(const ros::NodeHandle &nh) : _nh(nh)
     ROS_INFO_STREAM("Created Manager");
     _client = _nh.serviceClient<shared_msgs::AddCityToRegion>("/CreateCity");
     _subscriber = _nh.subscribe("/RTCreateCity", 1, &Manager::CreateCityRunTime, this);
-    // _db = std::move(std::make_unique<DatabaseHandler>(_nh));
+    _db = std::move(std::make_unique<DatabaseHandler>(_nh));
     LoadJson();
     GetFullInfoCities();
 }
 
 Manager::~Manager()
 {
+    // _db.~DatabaseHandler();
+    ROS_ERROR("Destroy Manager");
 }
 
 void Manager::CreateCityRunTime(const shared_msgs::RTCityReqPtr &req)
@@ -26,8 +28,7 @@ void Manager::CreateCityRunTime(const shared_msgs::RTCityReqPtr &req)
     {
         ROS_DEBUG("Insert City %s", srv.response.city.city_name.c_str());
         auto city = City(srv.response.city.city_name.c_str());
-
-        // _db->InsertCity(city);
+        _db->InsertCity(srv.response.city);
     }
     else
     {
