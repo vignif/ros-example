@@ -50,7 +50,7 @@ void Manager::GetFullInfoCities()
         if (_client.call(srv))
         {
 
-            // InsertCity(srv.response);
+            _db->InsertCity(srv.response.city);
         }
         else
         {
@@ -65,7 +65,6 @@ bool Manager::CreateCity(shared_msgs::AddCityToRegion::Request &req,
     if (req.city_name.size() > 0 && req.postal > 0)
     {
         auto city = City(req.city_name);
-
         ShowState();
         return true;
     }

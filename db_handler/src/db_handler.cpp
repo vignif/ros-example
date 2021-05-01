@@ -55,7 +55,6 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName)
 
 void DatabaseHandler::InsertCity(const shared_msgs::CityInfo &city)
 {
-
     auto name = city.city_name;
     auto postal = city.postal;
     auto region = city.region_name;
