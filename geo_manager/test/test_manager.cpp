@@ -8,27 +8,21 @@ class ManagerFixture : public ::testing::Test
 {
 protected:
     ros::NodeHandle nh{};
-
+    Manager M;
     // Setup
-    ManagerFixture()
+    ManagerFixture() : M(nh)
     {
-        Manager M(nh);
     }
 };
 
-int add(int a, int b)
+TEST_F(ManagerFixture, ShouldPass)
 {
-    return a + b;
+    ASSERT_TRUE(1 == 1);
 }
 
-TEST(NumberCmpTest, ShouldPass)
+TEST_F(ManagerFixture, ShouldFail)
 {
-    ASSERT_EQ(3, add(1, 2));
-}
-
-TEST(NumberCmpTest, ShouldFail)
-{
-    ASSERT_EQ(INT_MAX, add(INT_MAX, 1));
+    ASSERT_FALSE(1 == 0);
 }
 
 int main(int argc, char **argv)
