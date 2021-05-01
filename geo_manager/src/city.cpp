@@ -2,7 +2,7 @@
 
 City::City(const shared_msgs::CityInfo &city) : Entity(city.city_name)
 {
-    ROS_INFO_STREAM("Created city!: " << this->GetName());
+    // ROS_INFO_STREAM("Created city!: " << this->GetName());
     _lat = city.latitude;
     _lon = city.longitude;
     _postal = city.postal;

@@ -95,8 +95,9 @@ void Manager::LoadJson()
 
 void Manager::ShowState()
 {
+    ROS_DEBUG("Current DB entries:");
     for (auto obj : _cities)
     {
-        ROS_INFO("City %s in Coordinates %s", obj.GetName(), obj.GetCoordinates().c_str());
+        ROS_INFO("City %s \tin Coordinates %s", obj.GetName(), obj.GetCoordinates().c_str());
     }
 }

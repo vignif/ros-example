@@ -61,7 +61,7 @@ bool DatabaseHandler::InsertCity(const shared_msgs::CityInfo &city)
     auto latitude = city.latitude;
     auto longitude = city.longitude;
 
-    auto sql = "INSERT INTO cities (id, name, postal, region, latitude, longitude) VALUES ("
+    auto sql = "INSERT OR IGNORE INTO cities (id, name, postal, region, latitude, longitude) VALUES ("
                "NULL, "
                "'" +
                name + "', "

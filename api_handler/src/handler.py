@@ -15,7 +15,7 @@ class Server:
         self.connect_service()
 
     def connect_service(self):
-        rospy.init_node("connect_service", log_level=rospy.DEBUG)
+        rospy.init_node("connect_service", log_level=rospy.INFO)
         s = rospy.Service("CreateCity", AddCityToRegion, self.handle_response)
 
         print("Ready to receive new city query")
@@ -37,8 +37,7 @@ class Server:
                 lat = json_res[0]["lat"]
                 lon = json_res[0]["lon"]
                 region = json_res[0]["display_name"]
-                rospy.logdebug(region)
-
+                # rospy.logdebug(region)
                 response = AddCityToRegionResponse()
                 response.success = True
                 response.city.city_name = req.city_name
