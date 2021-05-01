@@ -14,7 +14,7 @@ DatabaseHandler::~DatabaseHandler()
 void DatabaseHandler::InitDatabase()
 {
     auto path = ros::package::getPath("db_handler");
-    std::string nameDB{"/test_db"};
+    std::string nameDB{"/test.db"};
     if (_nh.hasParam("db_name"))
     {
         ROS_DEBUG("get db_name");
@@ -53,7 +53,7 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName)
     return 0;
 }
 
-void DatabaseHandler::InsertCity(shared_msgs::CityInfo &city)
+void DatabaseHandler::InsertCity(const shared_msgs::CityInfo &city)
 {
 
     auto name = city.city_name;
