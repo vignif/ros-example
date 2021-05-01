@@ -13,14 +13,11 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   std_msgs
   roslib
-  shared_msgs
+  shared_msgs 
   db_handler
 )
 find_package(PkgConfig REQUIRED)
-
 pkg_check_modules(JSONCPP jsoncpp)
-
-#find_package(db_handler REQUIRED)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -108,7 +105,6 @@ include_directories(
  include
   ${catkin_INCLUDE_DIRS}
   ${JSONCPP_INCLUDE_DIRS}
-  ${db_handler_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
