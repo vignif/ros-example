@@ -2,11 +2,11 @@
 
 from __future__ import print_function
 
-from geo_manager.srv import AddCityToRegion, AddCityToRegionResponse
+from shared_msgs.srv import AddCityToRegion, AddCityToRegionResponse
 import rospy
 import requests
 import json
-from geo_manager.msg import CityInfo
+from shared_msgs.msg import CityInfo
 
 
 class Server:
