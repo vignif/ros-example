@@ -14,9 +14,17 @@ DatabaseHandler::~DatabaseHandler()
 void DatabaseHandler::InitDatabase()
 {
     auto path = ros::package::getPath("db_handler");
-    std::string nameDB;
-    _nh.getParam("db_name", nameDB);
-
+    std::string nameDB{"/test_db"};
+    if (_nh.hasParam("db_name"))
+    {
+        ROS_DEBUG("get db_name");
+        _nh.getParam("db_name", nameDB);
+    }
+    else
+    {
+        ROS_DEBUG("set db_name");
+        _nh.setParam("db_name", nameDB);
+    }
     auto fullpath = path + nameDB;
 
     ROS_DEBUG_STREAM("Database located in: " << fullpath);
