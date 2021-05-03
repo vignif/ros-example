@@ -1,3 +1,14 @@
+/**
+ * @file test_db.cpp
+ * @author Francesco Vigni (vignif@gmail.com)
+ * @brief Test the basic functionalities of the db_handler
+ * @version 0.4
+
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
 #include <gtest/gtest.h>
 #include <climits>
 #include "db_handler/db_handler.hpp"
