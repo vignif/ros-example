@@ -1,7 +1,0 @@
-<launch>
-  <env name="ROSCONSOLE_CONFIG_FILE" value="$(find geo_manager)../rosconfig/rosconsole.conf"/>  
-  <env name="ROSCONSOLE_FORMAT" value="[${severity}] [${time}] [${node}]: ${message}"/>
-  <node pkg="api_handler" name="api_handler" type="handler.py" output="screen"/>
-  <node name="geo_manager" pkg="geo_manager" type="geo_manager" output="screen"/>
-  <test test-name="geo_manager" pkg="geo_manager" type="geo_manager_test" />
-</launch>
