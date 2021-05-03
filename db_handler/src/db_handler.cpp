@@ -2,7 +2,10 @@
 
 DatabaseHandler::DatabaseHandler(const ros::NodeHandle &nh) : _nh(nh)
 {
-    InitDatabase();
+    if (InitDatabase())
+    {
+        _initOK = true;
+    }
 }
 
 DatabaseHandler::~DatabaseHandler()
@@ -11,7 +14,7 @@ DatabaseHandler::~DatabaseHandler()
     sqlite3_close(_db);
 }
 
-void DatabaseHandler::InitDatabase()
+bool DatabaseHandler::InitDatabase()
 {
     auto path = ros::package::getPath("db_handler");
     std::string nameDB{"/test.db"};
@@ -34,11 +37,13 @@ void DatabaseHandler::InitDatabase()
     if (_rc)
     {
         ROS_ERROR("Can't open database: %s\n", sqlite3_errmsg(_db));
+        return false;
     }
     else
     {
         ROS_DEBUG("Opened database successfully\n");
         InitTable();
+        return true;
     }
 }
 
@@ -53,7 +58,7 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName)
     return 0;
 }
 
-void DatabaseHandler::InitTable()
+bool DatabaseHandler::InitTable()
 {
     /* Create SQL statement */
     auto sql = "CREATE TABLE IF NOT EXISTS cities("
@@ -72,10 +77,12 @@ void DatabaseHandler::InitTable()
     {
         ROS_ERROR("SQL error: %s", _zErrMsg);
         sqlite3_free(_zErrMsg);
+        return false;
     }
     else
     {
         ROS_DEBUG("Table created successfully");
+        return true;
     }
 }
 
