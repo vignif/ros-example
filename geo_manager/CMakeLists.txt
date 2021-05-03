@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0.2)
 project(geo_manager)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-add_compile_options(-std=c++11)
+add_compile_options(-std=c++11 -Wall -Wextra)
 set(CMAKE_CXX_STANDARD 14)
 
 ## Find catkin macros and libraries
@@ -14,8 +14,8 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   roslib
   shared_msgs 
-  db_handler
 )
+find_package(db_handler REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(JSONCPP jsoncpp)
 
@@ -92,8 +92,8 @@ pkg_check_modules(JSONCPP jsoncpp)
 
 catkin_package(
   INCLUDE_DIRS include 
-  CATKIN_DEPENDS roscpp std_msgs roslib)
-
+  CATKIN_DEPENDS std_msgs roslib shared_msgs 
+)
 
 ###########
 ## Build ##
@@ -105,6 +105,7 @@ include_directories(
  include
   ${catkin_INCLUDE_DIRS}
   ${JSONCPP_INCLUDE_DIRS}
+  ${db_handler_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -128,6 +129,7 @@ target_link_libraries(
   ${PROJECT_NAME} 
   ${catkin_LIBRARIES} 
   jsoncpp
+  ${db_handler_LIBRARIES}
 )
 
 
@@ -198,9 +200,14 @@ install(DIRECTORY include/${PROJECT_NAME}/
 if (CATKIN_ENABLE_TESTING)
 find_package(rostest REQUIRED)
   add_rostest_gtest(geo_manager_test test/manager.test test/test_manager.cpp ${PROJECT_SRCS})
+  target_link_libraries(geo_manager_test ${GTEST_LIBRARIES} ${catkin_LIBRARIES} jsoncpp ${db_handler_LIBRARIES})
 
-  target_link_libraries(geo_manager_test ${catkin_LIBRARIES} jsoncpp)
+  add_dependencies(
+    geo_manager_test
+    ${catkin_EXPORTED_TARGETS}
+  )
 
-endif()
+
+  endif()
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)

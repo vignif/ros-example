@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0.2)
 project(api_handler)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
+add_compile_options(-std=c++11 -Wall -Wextra)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -208,3 +208,13 @@ catkin_install_python(PROGRAMS src/handler.py
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+
+if (CATKIN_ENABLE_TESTING)
+  find_package(rostest REQUIRED)
+  add_rostest(test/api.test)
+  ## Add folders to be run by python nosetests
+  catkin_add_nosetests(test)
+endif()
+
+
