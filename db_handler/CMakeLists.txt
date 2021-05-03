@@ -215,10 +215,18 @@ install(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_db_handler.cpp)
-# if(TARGET ${PROJECT_NAME}-test)
-#   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
-# endif()
+if (CATKIN_ENABLE_TESTING)
+find_package(rostest REQUIRED)
+find_package(shared_msgs REQUIRED)
+  add_rostest_gtest(db_handler_test test/db.test test/test_db.cpp src/db_handler.cpp)
+  target_link_libraries(db_handler_test ${GTEST_LIBRARIES} ${catkin_LIBRARIES} ${PROJECT_NAME})
+
+  add_dependencies(
+    db_handler_test
+    ${catkin_EXPORTED_TARGETS}
+    shared_msgs_generate_messages_cpp
+  )
+endif()
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
