@@ -84,7 +84,7 @@ The schema of the table `cities` is fixed and is managed with the object `Manage
 Run the unit tests using the [Catkin Command Line Tools](http://catkin-tools.readthedocs.io/en/latest/index.html#)
 
 ```
-catkin build geo_manager --no-deps --verbose --catkin-make-args run_tests
+catkin build db_handler --no-deps --verbose --catkin-make-args run_tests
 ```
 
 ## Versioning
