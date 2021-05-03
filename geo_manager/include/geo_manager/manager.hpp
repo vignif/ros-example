@@ -36,6 +36,7 @@ private:
      * Creates a new object of type City 
     */
     bool CreateCity(const shared_msgs::CityInfo &city);
+
     /**
      * Create a city at run time and store it in the database
     */
@@ -46,5 +47,5 @@ private:
     ros::ServiceClient _client;                            /** Ros Client asks to server for full info of a city */
     ros::Subscriber _subscriber;                           /** Ros Subscriber for runtime requests */
     std::vector<City> _cities;                             /** Store Cities */
-    DatabaseHandler _db;                                   /** Unique pointer to the database handler */
+    std::unique_ptr<DatabaseHandler> _db;                  /** Unique pointer to the database handler */
 };

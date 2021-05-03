@@ -2,24 +2,20 @@
 #include <jsoncpp/json/json.h>
 #include <fstream>
 
-Manager::Manager(const ros::NodeHandle &nh) : _nh(nh), _db(_nh)
+Manager::Manager(const ros::NodeHandle &nh) : _nh(nh)
 {
     ROS_ERROR_STREAM("Created Manager");
     _client = _nh.serviceClient<shared_msgs::AddCityToRegion>("/CreateCity");
     _subscriber = _nh.subscribe("/RTCreateCity", 1, &Manager::CreateCityRunTime, this);
-    ROS_ERROR("BEFORE UNIQUE PTR DB");
-    // _db = std::move(std::make_unique<DatabaseHandler>(_nh));
-    ROS_ERROR("AFTER UNIQUE PTR DB");
-    LoadJson();
-    ROS_ERROR_STREAM("JSON loaded");
+    _db = std::make_unique<DatabaseHandler>(_nh);
 
+    LoadJson();
     InitDBwithCities();
-    ROS_ERROR_STREAM("Created Manager OK");
 }
 
 Manager::~Manager()
 {
-    _db.~DatabaseHandler();
+    _db->~DatabaseHandler();
     ROS_ERROR("Destroy Manager");
 }
 
@@ -36,7 +32,7 @@ void Manager::CreateCityRunTime(const shared_msgs::RTCityReqPtr &req)
     }
     else
     {
-        ROS_ERROR_STREAM("failed");
+        ROS_ERROR_STREAM("Failed to call srv client");
     }
 }
 
@@ -65,7 +61,7 @@ void Manager::InitDBwithCities()
 
 bool Manager::CreateCity(const shared_msgs::CityInfo &city)
 {
-    if (_db.InsertCity(city))
+    if (_db->InsertCity(city))
     {
         return true;
     }
@@ -101,9 +97,9 @@ void Manager::ShowState()
 {
     ROS_DEBUG("Current DB entries:");
 
-    for (auto obj : _db.GetCities())
+    for (auto obj : _db->GetCities())
     {
         _cities.push_back(City{obj});
-        ROS_ERROR("City %s \t at %s", _cities.back().GetName(), _cities.back().GetCoordinates().c_str());
+        ROS_DEBUG("City %s \t at %s", _cities.back().GetName(), _cities.back().GetCoordinates().c_str());
     }
 }
