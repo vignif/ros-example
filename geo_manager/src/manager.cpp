@@ -2,19 +2,24 @@
 #include <jsoncpp/json/json.h>
 #include <fstream>
 
-Manager::Manager(const ros::NodeHandle &nh) : _nh(nh)
+Manager::Manager(const ros::NodeHandle &nh) : _nh(nh), _db(_nh)
 {
-    ROS_INFO_STREAM("Created Manager");
+    ROS_ERROR_STREAM("Created Manager");
     _client = _nh.serviceClient<shared_msgs::AddCityToRegion>("/CreateCity");
     _subscriber = _nh.subscribe("/RTCreateCity", 1, &Manager::CreateCityRunTime, this);
-    _db = std::move(std::make_unique<DatabaseHandler>(_nh));
+    ROS_ERROR("BEFORE UNIQUE PTR DB");
+    // _db = std::move(std::make_unique<DatabaseHandler>(_nh));
+    ROS_ERROR("AFTER UNIQUE PTR DB");
     LoadJson();
+    ROS_ERROR_STREAM("JSON loaded");
+
     InitDBwithCities();
+    ROS_ERROR_STREAM("Created Manager OK");
 }
 
 Manager::~Manager()
 {
-    _db->~DatabaseHandler();
+    _db.~DatabaseHandler();
     ROS_ERROR("Destroy Manager");
 }
 
@@ -44,7 +49,7 @@ void Manager::InitDBwithCities()
         shared_msgs::AddCityToRegion srv;
         srv.request.city_name = name;
         srv.request.postal = postal;
-        _client.waitForExistence();
+        _client.waitForExistence(ros::Duration(5));
 
         if (_client.call(srv))
         {
@@ -52,7 +57,7 @@ void Manager::InitDBwithCities()
         }
         else
         {
-            ROS_ERROR_STREAM("failed");
+            ROS_ERROR_STREAM("Failed to call srv client");
         }
     }
     ShowState();
@@ -60,7 +65,7 @@ void Manager::InitDBwithCities()
 
 bool Manager::CreateCity(const shared_msgs::CityInfo &city)
 {
-    if (_db->InsertCity(city))
+    if (_db.InsertCity(city))
     {
         return true;
     }
@@ -96,9 +101,9 @@ void Manager::ShowState()
 {
     ROS_DEBUG("Current DB entries:");
 
-    for (auto obj : _db->GetCities())
+    for (auto obj : _db.GetCities())
     {
         _cities.push_back(City{obj});
-        ROS_INFO("City %s \t at %s", _cities.back().GetName(), _cities.back().GetCoordinates().c_str());
+        ROS_ERROR("City %s \t at %s", _cities.back().GetName(), _cities.back().GetCoordinates().c_str());
     }
 }
