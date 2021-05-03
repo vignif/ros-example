@@ -121,7 +121,8 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/main.cpp)
-add_executable(${PROJECT_NAME} src/main.cpp src/region.cpp src/city.cpp src/manager.cpp)
+set(PROJECT_SRCS  src/region.cpp src/city.cpp src/manager.cpp)
+add_executable(${PROJECT_NAME} src/main.cpp ${PROJECT_SRCS})
 
 target_link_libraries(
   ${PROJECT_NAME} 
@@ -195,9 +196,11 @@ install(DIRECTORY include/${PROJECT_NAME}/
 ## Add gtest based cpp test target and link libraries
 
 if (CATKIN_ENABLE_TESTING)
-  find_package(GTest REQUIRED)
-  catkin_add_gtest(${PROJECT_NAME}-test test/test_manager.cpp)
-  target_link_libraries(${PROJECT_NAME}-test GTest::GTest ${catkin_LIBRARIES})
+find_package(rostest REQUIRED)
+  add_rostest_gtest(geo_manager_test test/manager.test test/test_manager.cpp ${PROJECT_SRCS})
+
+  target_link_libraries(geo_manager_test ${catkin_LIBRARIES} jsoncpp)
+
 endif()
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
