@@ -19,14 +19,39 @@
 class DatabaseHandler
 {
 public:
+    /**
+     * @brief Construct a new Database Handler object
+     * 
+     * @param nh ros node handle
+     */
     DatabaseHandler(const ros::NodeHandle &nh);
+
+    /**
+     * @brief Destroy the Database Handler object
+     * close db resource
+     */
     ~DatabaseHandler();
+
+    /**
+     * @brief InsertCity in database
+     * 
+     * @param city 
+     * @return true if new city is added or city is already in db
+     * @return false otherwise
+     */
     bool InsertCity(const shared_msgs::CityInfo &city);
+
+    /**
+     * @brief Get the Cities from the database
+     * Execute a select * query on the database
+     * @return std::vector<shared_msgs::CityInfo> 
+     */
     std::vector<shared_msgs::CityInfo> GetCities();
+    bool _initOK{false}; /** Flag return if database is initialized correctly */
 
 private:
-    void InitDatabase();
-    void InitTable();
+    bool InitDatabase(); /** Check if db file exists, if not create one */
+    bool InitTable();    /** Check if db table exists, if not create one with proper schema */
     std::vector<shared_msgs::CityInfo> _cities;
     static int CallbackGetCities(void *NotUsed, int argc, char **argv, char **azColName);
 
