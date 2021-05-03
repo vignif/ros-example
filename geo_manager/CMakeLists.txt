@@ -197,17 +197,17 @@ install(DIRECTORY include/${PROJECT_NAME}/
 
 ## Add gtest based cpp test target and link libraries
 
-if (CATKIN_ENABLE_TESTING)
-find_package(rostest REQUIRED)
-  add_rostest_gtest(geo_manager_test test/manager.test test/test_manager.cpp ${PROJECT_SRCS})
-  target_link_libraries(geo_manager_test ${GTEST_LIBRARIES} ${catkin_LIBRARIES} jsoncpp ${db_handler_LIBRARIES})
+# if (CATKIN_ENABLE_TESTING)
+# find_package(rostest REQUIRED)
+#   add_rostest_gtest(geo_manager_test test/manager.test test/test_manager.cpp ${PROJECT_SRCS})
+#   target_link_libraries(geo_manager_test ${GTEST_LIBRARIES} ${catkin_LIBRARIES} jsoncpp ${db_handler_LIBRARIES})
 
-  add_dependencies(
-    geo_manager_test
-    ${catkin_EXPORTED_TARGETS}
-  )
+#   add_dependencies(
+#     geo_manager_test
+#     ${catkin_EXPORTED_TARGETS}
+#   )
 
 
-  endif()
+#   endif()
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
