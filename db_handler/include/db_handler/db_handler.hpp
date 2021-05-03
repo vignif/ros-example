@@ -1,9 +1,9 @@
 /**
  * @file db_handler.hpp
- * @author your name (you@domain.com)
+ * @author Francesco Vigni (vignif@gmail.com)
  * @brief Custom wrapper for managing a sqlite3 database file.
- * @version 0.1
- * @date 2021-05-03
+ * @version 0.4
+
  * 
  * @copyright Copyright (c) 2021
  * 

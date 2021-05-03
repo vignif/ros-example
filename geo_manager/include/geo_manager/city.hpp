@@ -1,8 +1,8 @@
 /**
  * @file city.hpp
- * @author your name (you@domain.com)
+ * @author Francesco Vigni (vignif@gmail.com)
  * @brief Manage object of a City and returns the coordinates
- * @version 0.1
+ * @version 0.4
  * 
  * @copyright Copyright (c) 2021
  * 

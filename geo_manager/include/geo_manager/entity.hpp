@@ -1,9 +1,9 @@
 /**
  * @file entity.hpp
- * @author your name (you@domain.com)
+ * @author Francesco Vigni (vignif@gmail.com)
  * @brief Class used for returning name of an entity
- * @version 0.1
- * @date 2021-05-03
+ * @version 0.4
+
  * 
  * @copyright Copyright (c) 2021
  * 
