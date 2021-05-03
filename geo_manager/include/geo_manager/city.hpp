@@ -1,3 +1,13 @@
+/**
+ * @file city.hpp
+ * @author your name (you@domain.com)
+ * @brief Manage object of a City and returns the coordinates
+ * @version 0.1
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
 #include "geo_manager/entity.hpp"
 #include "shared_msgs/CityInfo.h"
 #include <string>

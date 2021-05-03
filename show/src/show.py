@@ -1,3 +1,15 @@
+"""Show the cities to a browser
+
+This script allows the user to render on a browser the information
+of the cities that are currently stored in the database like:
+- Name of the city
+- Coordinates
+
+The script also places each city in its correct position according 
+to the latitude and longitude values retrieved from the sqlite3 database.
+
+"""
+
 #!/usr/bin/env python
 
 import plotly.graph_objects as go
@@ -10,12 +22,15 @@ import rospy
 
 
 class Show:
+    """Show interface for displaying the cities in a browser"""
+
     def __init__(self):
         rospy.init_node("Show")
         self.df = None
         self.sub = rospy.Subscriber("render_cities", Empty, self.get_cities)
 
     def get_cities(self, data):
+        """Access the db and store in a panda dataframe the db table 'cities'"""
         try:
             rospack = rospkg.RosPack()
             path = rospack.get_path("db_handler")
@@ -29,6 +44,7 @@ class Show:
         self.render()
 
     def render(self):
+        """Fire the browser and display the cities with a proper style"""
         fig = go.Figure(
             data=go.Scattergeo(
                 lon=self.df["longitude"],

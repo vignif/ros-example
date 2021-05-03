@@ -1,3 +1,14 @@
+/**
+ * @file db_handler.hpp
+ * @author your name (you@domain.com)
+ * @brief Custom wrapper for managing a sqlite3 database file.
+ * @version 0.1
+ * @date 2021-05-03
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
 #ifndef DB_HANDLER_LIBRARY_H
 #define DB_HANDLER_LIBRARY_H
 
