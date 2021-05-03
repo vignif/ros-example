@@ -1,6 +1,6 @@
 #include "geo_manager/manager.hpp"
-#include <jsoncpp/json/json.h>
 #include <fstream>
+#include <jsoncpp/json/json.h>
 
 Manager::Manager(const ros::NodeHandle &nh) : _nh(nh)
 {
@@ -27,7 +27,6 @@ void Manager::CreateCityRunTime(const shared_msgs::RTCityReqPtr &req)
     _client.waitForExistence();
     if (_client.call(srv))
     {
-        // ROS_DEBUG("Insert City %s", srv.response.city.city_name.c_str());
         CreateCity(srv.response.city);
     }
     else
