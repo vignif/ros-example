@@ -48,7 +48,7 @@ bool DatabaseHandler::InitDatabase()
     }
 }
 
-static int callback(void *NotUsed, int argc, char **argv, char **azColName)
+static int callback([[maybe_unused]] void *NotUsed, int argc, char **argv, char **azColName)
 {
     int i;
     for (i = 0; i < argc; i++)
@@ -130,10 +130,10 @@ bool DatabaseHandler::InsertCity(const shared_msgs::CityInfo &city)
     }
 }
 
-int DatabaseHandler::CallbackGetCities(void *NotUsed, int argc, char **argv, char **azColName)
+int DatabaseHandler::CallbackGetCities(void *refCities, [[maybe_unused]] int argc, char **argv, [[maybe_unused]] char **azColName)
 {
 
-    auto *cities = static_cast<std::vector<shared_msgs::CityInfo> *>(NotUsed);
+    auto *cities = static_cast<std::vector<shared_msgs::CityInfo> *>(refCities);
 
     shared_msgs::CityInfo city;
     city.city_name = argv[1] ? argv[1] : "(NULL)";

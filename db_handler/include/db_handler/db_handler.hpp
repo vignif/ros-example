@@ -64,7 +64,7 @@ private:
     bool InitDatabase(); /** Check if db file exists, if not create one */
     bool InitTable();    /** Check if db table exists, if not create one with proper schema */
     std::vector<shared_msgs::CityInfo> _cities;
-    static int CallbackGetCities(void *NotUsed, int argc, char **argv, char **azColName);
+    static int CallbackGetCities(void *refCities, int argc, char **argv, char **azColName);
 
     ros::NodeHandle _nh; /** Ros nodehandle */
     sqlite3 *_db;        /** Pointer to SQLite connection */
