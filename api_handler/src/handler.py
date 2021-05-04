@@ -26,8 +26,7 @@ class Server:
     def ros_init(self):
         rospy.init_node("connect_service", log_level=rospy.INFO)
         s = rospy.Service("CreateCity", AddCityToRegion, self.handle_response)
-
-        print("Ready to receive new city query")
+        rospy.loginfo("Ready to receive new city query")
 
     """handle_response
     It receives the city information on a ros service request and 
