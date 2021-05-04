@@ -42,6 +42,11 @@ TEST_F(DatabaseFixture, DBisInitializedCorrectly)
 TEST_F(DatabaseFixture, InsertCity)
 {
     shared_msgs::CityInfo city;
+    city.city_name = "Roma";
+    city.postal = 00100;
+    city.region_name = "Lazio";
+    city.longitude = 12.4829321;
+    city.latitude = 41.8933203;
     auto res = _db.InsertCity(city);
     ASSERT_TRUE(res);
 }
