@@ -1,0 +1,16 @@
+{
+    "cities": [
+        {
+            "name": "Forli",
+            "postal": 47122
+        },
+        {
+            "name": "Munich",
+            "postal": 80333
+        },
+        {
+            "name": "Bologna",
+            "postal": 40121
+        }
+    ]
+}
