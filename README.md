@@ -20,6 +20,9 @@ Note most of the postal entries are zero, this is due to the design of the api w
 1. When launching the main script `roslaunch geo_manager Manager.launch`
 - A database is created (if doesn't exist) and filled with proper table schema
 - A json file is parsed and is propagated as an api request. The api response is handled and stored in the db.
+The user can add more cities to the json file, and their information will be requested at startup time.
+If the json file is not present or empty, this step is skipped.
+
 2. The following nodes are running
 - `geo_manager`
 - `api_handler`
@@ -30,7 +33,17 @@ Note most of the postal entries are zero, this is due to the design of the api w
 rostopic pub /RTCreateCity geo_manager/RTCityReq "city_name: 'New York'
 postal: 10001"
 ```
-4. Visualize in a browser the cities stored in the database with `rostopic pub /render_cities std_msgs/Empty "{}"`
+
+A unique constraint is on the tuple (city - postal) is present.
+If the tuple (city - postal) is already present in the db, a warning will be returned to the user,
+otherwise a new row will be placed in the db.
+If the API is not able to retrieve the info for a city (i.e. wrong spell of the city), a warning is returned to the user.
+
+4. Visualize in a browser the cities stored in the database with 
+
+```
+rostopic pub /render_cities std_msgs/Empty "{}"
+```
 
 ## Outside ROS
 The project also contains:
