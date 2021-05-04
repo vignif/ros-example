@@ -44,6 +44,9 @@ class Server:
                 response.city.region_name = str(region)
                 response.city.latitude = float(lat)
                 response.city.longitude = float(lon)
+            except requests.ConnectionError as co_e:
+                rospy.logerr("API is not available")
+                response.success = False
             except IndexError as id_e:
                 rospy.logerr(
                     "Api can't find info for city %s! Did you spell it correctly?",
