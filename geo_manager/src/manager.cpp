@@ -4,7 +4,7 @@
 
 Manager::Manager(const ros::NodeHandle &nh) : _nh(nh)
 {
-    ROS_ERROR_STREAM("Created Manager");
+    ROS_DEBUG_STREAM("Created Manager");
     _client = _nh.serviceClient<shared_msgs::AddCityToRegion>("/CreateCity");
     _subscriber = _nh.subscribe("/RTCreateCity", 1, &Manager::CreateCityRunTime, this);
     _db = std::make_unique<DatabaseHandler>(_nh);
@@ -25,13 +25,14 @@ void Manager::CreateCityRunTime(const shared_msgs::RTCityReqPtr &req)
     srv.request.city_name = req->city_name;
     srv.request.postal = req->postal;
     _client.waitForExistence();
-    if (_client.call(srv))
-    {
-        CreateCity(srv.response.city);
-    }
-    else
+    if (!_client.call(srv))
     {
         ROS_ERROR_STREAM("Failed to call srv client");
+    }
+
+    if (srv.response.success)
+    {
+        CreateCity(srv.response.city);
     }
 }
 
@@ -80,7 +81,7 @@ void Manager::LoadJson()
 
     if (!reader.parse(ifs, root))
     {
-        ROS_ERROR("failed to parse");
+        ROS_ERROR("Failed to parse json file");
     }
 
     Json::Value val = root["cities"];
@@ -94,8 +95,6 @@ void Manager::LoadJson()
 
 void Manager::ShowState()
 {
-    ROS_DEBUG("Current DB entries:");
-
     for (auto obj : _db->GetCities())
     {
         _cities.push_back(City{obj});

@@ -27,6 +27,7 @@ class Server:
                 "format": "json",
                 "limit": 1,
             }
+            response = AddCityToRegionResponse()
             try:
                 r = requests.get(
                     "https://nominatim.openstreetmap.org/search?",
@@ -37,13 +38,18 @@ class Server:
                 lon = json_res[0]["lon"]
                 region = json_res[0]["display_name"]
                 # rospy.logdebug(region)
-                response = AddCityToRegionResponse()
                 response.success = True
                 response.city.city_name = req.city_name
                 response.city.postal = req.postal
                 response.city.region_name = str(region)
                 response.city.latitude = float(lat)
                 response.city.longitude = float(lon)
+            except IndexError as id_e:
+                rospy.logerr(
+                    "Api can't find info for city %s! Did you spell it correctly?",
+                    req.city_name,
+                )
+                response.success = False
             except Exception as e:
                 rospy.logerr("Failed to retrieve info of the city! %s", e)
                 response.success = False

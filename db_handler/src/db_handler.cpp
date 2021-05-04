@@ -17,15 +17,16 @@ DatabaseHandler::~DatabaseHandler()
 bool DatabaseHandler::InitDatabase()
 {
     auto path = ros::package::getPath("db_handler");
-    std::string nameDB{"/test.db"};
+    std::string nameDB{"/test.db"}; //default db name
+
     if (_nh.hasParam("db_name"))
     {
-        ROS_DEBUG("get db_name");
+        // get param if already stored in param server
         _nh.getParam("db_name", nameDB);
     }
     else
     {
-        ROS_DEBUG("set db_name");
+        // set param in param server wish default name
         _nh.setParam("db_name", nameDB);
     }
     auto fullpath = path + nameDB;
@@ -94,7 +95,7 @@ bool DatabaseHandler::InsertCity(const shared_msgs::CityInfo &city)
     auto latitude = city.latitude;
     auto longitude = city.longitude;
 
-    auto sql = "INSERT OR IGNORE INTO cities (id, name, postal, region, latitude, longitude) VALUES ("
+    auto sql = "INSERT INTO cities (id, name, postal, region, latitude, longitude) VALUES ("
                "NULL, "
                "'" +
                name + "', "
@@ -110,7 +111,13 @@ bool DatabaseHandler::InsertCity(const shared_msgs::CityInfo &city)
     /* Execute SQL statement */
     _rc = sqlite3_exec(_db, sql.c_str(), callback, 0, &_zErrMsg);
 
-    if (_rc != SQLITE_OK)
+    if (sqlite3_errcode(_db) == 19) // code 19 is unique constraint violation
+    {
+        ROS_WARN("City %s is already stored in the database", name.c_str());
+        sqlite3_free(_zErrMsg);
+        return true;
+    }
+    else if (_rc != SQLITE_OK)
     {
         ROS_ERROR("SQL error: %s", _zErrMsg);
         sqlite3_free(_zErrMsg);
@@ -153,7 +160,7 @@ std::vector<shared_msgs::CityInfo> DatabaseHandler::GetCities()
     }
     else
     {
-        ROS_DEBUG("Query executed correctly");
+        // ROS_DEBUG("Query executed correctly");
     }
     return _cities;
 }
