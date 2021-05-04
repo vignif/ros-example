@@ -1,3 +1,7 @@
+    """Wrapper for handling API requests and responses
+    It advertise a ros topic and queries the API with proper information.
+    The API response is handled and return as ros service response.
+    """
 #!/usr/bin/env python
 
 from __future__ import print_function
@@ -10,15 +14,29 @@ from shared_msgs.msg import CityInfo
 
 
 class Server:
+    """Server
+    Ros server class to manage API communications
+    """
     def __init__(self):
-        self.connect_service()
+        self.ros_init()
 
-    def connect_service(self):
+    """ros_init
+    Initialize ros related structure at object creation
+    """
+    def ros_init(self):
         rospy.init_node("connect_service", log_level=rospy.INFO)
         s = rospy.Service("CreateCity", AddCityToRegion, self.handle_response)
 
         print("Ready to receive new city query")
 
+    """handle_response
+    It receives the city information on a ros service request and 
+    execute the API call accordingly.
+    If the API doesn't responde a warning is raised.
+    If the API is not able to respond (city name is spelled wrong), a warning is raised.
+    Other exceptions will return errors.
+    The API response is stored in a proper structure and returned as a service response.
+    """
     def handle_response(self, req):
         if req.city_name != "" or req.postal != 0:
             ploads = {
@@ -45,10 +63,10 @@ class Server:
                 response.city.latitude = float(lat)
                 response.city.longitude = float(lon)
             except requests.ConnectionError as co_e:
-                rospy.logerr("API is not available")
+                rospy.logwarn("API is not available")
                 response.success = False
             except IndexError as id_e:
-                rospy.logerr(
+                rospy.logwarn(
                     "Api can't find info for city %s! Did you spell it correctly?",
                     req.city_name,
                 )

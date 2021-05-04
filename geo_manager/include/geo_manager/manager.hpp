@@ -4,7 +4,7 @@
  * @brief Instanciate the resources at startup and makes sure to 
  * advertise correct services in order to add more cities at run time.
  * It parses the json at start time and propagates the info to the api handler.
- * It access the database with a unique pointer.
+ * It accesses the database with a unique pointer.
  * @version 0.4
 
  * 

@@ -58,18 +58,19 @@ public:
      * @return std::vector<shared_msgs::CityInfo> 
      */
     std::vector<shared_msgs::CityInfo> GetCities();
-    bool _initOK{false}; /** Flag return if database is initialized correctly */
+    bool _initOK{false}; /** Flag return true if database is initialized correctly */
 
 private:
-    bool InitDatabase(); /** Check if db file exists, if not create one */
-    bool InitTable();    /** Check if db table exists, if not create one with proper schema */
-    std::vector<shared_msgs::CityInfo> _cities;
+    /** Callback to handle sql query response */
     static int CallbackGetCities(void *refCities, int argc, char **argv, char **azColName);
 
-    ros::NodeHandle _nh; /** Ros nodehandle */
-    sqlite3 *_db;        /** Pointer to SQLite connection */
-    char *_zErrMsg = 0;  /** Save any error messages */
-    int _rc;             /** Database connection object */
+    bool InitDatabase();                        /** Check if db file exists, if not create one */
+    bool InitTable();                           /** Check if db table exists, if not create one with proper schema */
+    std::vector<shared_msgs::CityInfo> _cities; /** Member stores the table cities when requested */
+    ros::NodeHandle _nh;                        /** Ros nodehandle */
+    sqlite3 *_db;                               /** Pointer to SQLite connection */
+    char *_zErrMsg = 0;                         /** Save any error messages */
+    int _rc;                                    /** Database connection object */
 };
 
 #endif
