@@ -1,7 +1,8 @@
-    """Wrapper for handling API requests and responses
-    It advertise a ros topic and queries the API with proper information.
-    The API response is handled and return as ros service response.
-    """
+"""Ros server service class to manage API communications
+Wrapper for handling API requests and responses
+It advertise a ros topic and queries the API with proper information.
+The API response is handled and return as ros service response.
+"""
 #!/usr/bin/env python
 
 from __future__ import print_function
@@ -17,12 +18,14 @@ class Server:
     """Server
     Ros server class to manage API communications
     """
+
     def __init__(self):
         self.ros_init()
 
     """ros_init
     Initialize ros related structure at object creation
     """
+
     def ros_init(self):
         rospy.init_node("connect_service", log_level=rospy.INFO)
         s = rospy.Service("CreateCity", AddCityToRegion, self.handle_response)
@@ -36,6 +39,7 @@ class Server:
     Other exceptions will return errors.
     The API response is stored in a proper structure and returned as a service response.
     """
+
     def handle_response(self, req):
         if req.city_name != "" or req.postal != 0:
             ploads = {
