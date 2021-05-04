@@ -1,6 +1,5 @@
 <launch>
-<node name="db_handler" pkg="db_handler" type="db_handler" output="screen" >
-  <param name="db_name" value="/test.db"/>
-</node>
-
+  <node name="db_handler" pkg="db_handler" type="db_handler" output="screen" >
+    <param name="db_name" value="/test.db"/>
+  </node>
 </launch>
