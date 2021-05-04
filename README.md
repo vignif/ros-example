@@ -15,19 +15,21 @@ The information in the database can be explored with a software like [sqlite bro
 
 ![db](.figures/db.png)
 
-Note most of the postal entries are zero, this is due to the design of the api which is not returning the postal code. The value can be stored via providing it as input in a ros message.
+Note most of the postal entries are zero, this is due to the design of the API which is not returning the postal code. The value can be stored via providing it as input in a ros message.
 
 ## Information flow
 1. When launching the main script `roslaunch geo_manager Manager.launch`
 - A database is created (if doesn't exist) and filled with proper table schema
-- A json file is parsed and is propagated as an api request. The api response is handled and stored in the db.
-The user can add more cities to the json file, and their information will be requested at startup time.
-If the json file is not present or empty, this step is skipped.
+- A json file is parsed and propagated as an API request. The API response is handled and stored in the db.
+The user can append cities to the json file, and their information will be processed at startup time.
 
-2. The following nodes are running
+If the json file is not present or empty, it will be skipped.
+
+2. `Manager.launch` spins the following nodes:
 - `geo_manager`
 - `api_handler`
 - `show`
+
 3. The user or a node can request to add a new city to the database via the topic `/RTCreateCity` with:
 
 ```
@@ -35,12 +37,13 @@ rostopic pub /RTCreateCity geo_manager/RTCityReq "city_name: 'New York'
 postal: 10001"
 ```
 
-A unique constraint is on the tuple (city - postal) is present.
+A unique constraint on the tuple (city - postal) is present.
 If the tuple (city - postal) is already present in the db, a warning will be returned to the user,
 otherwise a new row will be placed in the db.
-If the API is not able to retrieve the info for a city (i.e. wrong spell of the city), a warning is returned to the user.
 
-4. Visualize in a browser the cities stored in the database with 
+If the API is not able to retrieve the info for a city (i.e. wrong spell of the city or timeout), a warning is returned to the user.
+
+4. Visualize in a browser the cities stored in the database with:
 
 ```
 rostopic pub /render_cities std_msgs/Empty "{}"
@@ -48,7 +51,7 @@ rostopic pub /render_cities std_msgs/Empty "{}"
 
 ## Outside ROS
 The project also contains:
-- the data management of an SQL database using [SQLite3](https://www.sqlite.org/)
+- A wrapper class for an SQL database [SQLite3](https://www.sqlite.org/)
 - A JSON parser implemented using a cpp library [json](https://github.com/open-source-parsers/jsoncpp)
 - Interface to a remote API [nominatim](https://nominatim.openstreetmap.org)
 
@@ -86,7 +89,7 @@ in case you are using zsh
 source ~/ros_ws/devel/setup.zsh
 ```
 
-Now you can fire the two main nodes with:
+Now you can spin the main nodes with:
 ```
 roslaunch geo_manager Manager.launch
 ```
