@@ -47,8 +47,8 @@ public:
      * @brief InsertCity in database
      * 
      * @param city 
-     * @return true if new city is added or city is already in db
-     * @return false otherwise
+     * @return true if new city is added 
+     * @return false if city is already in db or db generic error
      */
     bool InsertCity(const shared_msgs::CityInfo &city);
 
