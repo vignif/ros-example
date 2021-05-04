@@ -45,15 +45,15 @@ void Manager::InitDBwithCities()
         shared_msgs::AddCityToRegion srv;
         srv.request.city_name = name;
         srv.request.postal = postal;
-        _client.waitForExistence(ros::Duration(5));
-
-        if (_client.call(srv))
-        {
-            CreateCity(srv.response.city);
-        }
-        else
+        _client.waitForExistence();
+        if (!_client.call(srv))
         {
             ROS_ERROR_STREAM("Failed to call srv client");
+        }
+
+        if (srv.response.success)
+        {
+            CreateCity(srv.response.city);
         }
     }
     ShowState();
