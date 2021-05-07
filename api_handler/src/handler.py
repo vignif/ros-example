@@ -1,17 +1,15 @@
-"""Ros server service class to manage API communications
+"""@api_handler
+Ros server service class to manage API communications
 Wrapper for handling API requests and responses
 It advertise a ros topic and queries the API with proper information.
 The API response is handled and return as ros service response.
 """
-#!/usr/bin/env python
 
-from __future__ import print_function
-
-from shared_msgs.srv import AddCityToRegion, AddCityToRegionResponse
-import rospy
-import requests
-import json
 from shared_msgs.msg import CityInfo
+from shared_msgs.srv import AddCityToRegion, AddCityToRegionResponse
+import json
+import requests
+import rospy
 
 
 class Server:
