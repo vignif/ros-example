@@ -1,21 +1,25 @@
-# The Great C++ & Python Ros Example
+# ROS + sqlite + jsoncpp + API + tests
 
-Catkin build status:
+This app exemplifies how ROS can be used alongside traditional stacks.
+This repository wants to explore with a practical approach the paradigms in the middleware ROS (Robotic Operating System) while connecting ROS with external functionalities.
+Stack used here:
+- Catkin package for ROS [melodic](http://wiki.ros.org/melodic)
+- A wrapper class for an SQL database [SQLite3](https://www.sqlite.org/)
+- A JSON parser implemented using a cpp library [json](https://github.com/open-source-parsers/jsoncpp)
+- Interface to a remote API [nominatim](https://nominatim.openstreetmap.org)
+
 
 [![Build Actions Status](https://github.com/vignif/ros-example/workflows/Build/badge.svg)](https://github.com/vignif/ros-example/actions)
-
-
-This repository wants to explore with a practical approach the paradigms in the middleware ROS (Robotic Operating System) while connecting ROS with external functionalities.
 
 A script can render a map with a marker per each city in the database.
 
 ![map](.figures/map.png)
 
-The information in the database can be explored with a software like [sqlite browser](https://sqlitebrowser.org/) obtaining something like:
+The information in the database can be explored with software like [sqlite browser](https://sqlitebrowser.org/) obtaining something like:
 
 ![db](.figures/db.png)
 
-Note most of the postal entries are zero, this is due to the design of the API which is not returning the postal code. The value can be stored via providing it as input in a ros message.
+Note most of the postal entries are zero, this is due to the design of the API which is not returning the postal code. The value can be stored as input in a ros message.
 
 ## Information flow
 1. When launching the main script `roslaunch geo_manager Manager.launch`
@@ -23,7 +27,7 @@ Note most of the postal entries are zero, this is due to the design of the API w
 - A json file is parsed and propagated as an API request. The API response is handled and stored in the db.
 The user can append cities to the json file, and their information will be processed at startup time.
 
-If the json file is not present or empty, it will be skipped.
+It will be skipped if the JSON file is not present or empty.
 
 2. `Manager.launch` spins the following nodes:
 - `geo_manager`
@@ -48,12 +52,6 @@ If the API is not able to retrieve the info for a city (i.e. wrong spell of the 
 ```
 rostopic pub /render_cities std_msgs/Empty "{}"
 ```
-
-## Outside ROS
-The project also contains:
-- A wrapper class for an SQL database [SQLite3](https://www.sqlite.org/)
-- A JSON parser implemented using a cpp library [json](https://github.com/open-source-parsers/jsoncpp)
-- Interface to a remote API [nominatim](https://nominatim.openstreetmap.org)
 
 ## How to install
 Given your catkin workspace `~/ros_ws`, clone the current repository in it with:
